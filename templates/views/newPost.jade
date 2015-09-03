@@ -1,0 +1,31 @@
+extends ../layouts/main.jade
+
+block scripts
+  script(src='https://maps.googleapis.com/maps/api/js?v=3.exp')
+  script(src='/js/jquery-2.1.4.min.js')
+
+block content
+  .container: .row: .col-md-12
+    h1 我要發問！
+    hr
+    form.form-horizontal
+      .form-group
+        label.col-sm-2.control-label 問題標題
+        .col-sm-10
+          input.form-control
+
+      .form-group
+        label.col-sm-2.control-label 問題內容
+        .col-sm-10
+          textarea.form-control(rows='5', style='resize:vertical')
+
+      .form-group
+        label.col-sm-2.control-label 地點
+        .col-sm-10
+          input.form-control
+
+      .form-group
+        .col-sm-offset-2.col-sm-10
+          button.btn.btn-default(type='submit') 送出
+    
+    

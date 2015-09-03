@@ -1,0 +1,15 @@
+extends ../layouts/main.jade
+
+mixin posts(data)
+  .post-list
+    each p in data
+      .post-cards.well
+        .title= p.title
+        .content= p.content
+
+block content
+  - var posts = [{ title: '問題一', content: '問題內容問題內容問題內容問題內容問題內容' }, { title: '問題二', content: '問題內容' }];
+  .container: .row: .col-md-12
+    h1 問題列表
+    hr
+    +posts(posts)

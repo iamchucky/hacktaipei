@@ -1,0 +1,36 @@
+extends ../layouts/main.jade
+
+
+mixin comments(data)
+  .comments-container
+    p 新增留言
+  
+mixin answers(data)
+  .answers
+    each a in data
+      .answers-text
+        p.answer= a
+        +comments()
+
+block scripts
+  script(src='https://maps.googleapis.com/maps/api/js?v=3.exp')
+  script(src='/js/jquery-2.1.4.min.js')
+  script(src='/js/app.js')
+
+block content
+  - var ans = ['這是第一個回答內容', '這是第二個回答內容'];
+  .container: .row: .col-md-12
+    h1 問題標題
+    hr
+    .post-text
+      p 問題內容
+
+    .location.well 地址是...
+      div(id='inpost-map-canvas')
+
+    +comments()
+
+    .answers-container
+      h2= ans.length + ' 回答'
+      hr
+      +answers(ans)
