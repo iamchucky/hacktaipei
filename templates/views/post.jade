@@ -7,10 +7,11 @@ mixin comments(data)
   
 mixin answers(data)
   .answers
-    each a in data
-      .answers-text
-        p.answer= a
-        +comments()
+    if data && data.length
+      each a in data
+        .answers-text
+          p.answer= a
+          +comments()
 
 block scripts
   script(src='https://maps.googleapis.com/maps/api/js?v=3.exp')
@@ -18,19 +19,21 @@ block scripts
   script(src='/js/app.js')
 
 block content
-  - var ans = ['這是第一個回答內容', '這是第二個回答內容'];
   .container: .row: .col-md-12
-    h1 問題標題
+    h1= post.title
     hr
     .post-text
-      p 問題內容
+      p= post.content
 
-    .location.well 地址是...
-      div(id='inpost-map-canvas')
+    if post.location
+      span= post.location
+
+    if post.lat
+      .well: div(id='inpost-map-canvas')
 
     +comments()
 
     .answers-container
-      h2= ans.length + ' 回答'
+      h2= ((ans && ans.length) || 0) + ' 回答'
       hr
       +answers(ans)

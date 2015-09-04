@@ -7,7 +7,9 @@ html
     nav.navbar.navbar-default.navbar-fixed-top
       .container
         .navbar-header
-          a.navbar-brand Hack.Taipei
+          a.navbar-brand(href='/') Hack.Taipei
+        .nav.navbar-nav.navbar-right
+          a.btn.btn-default.navbar-btn(href='/post/new') 我要發問
       
     block content
     block scripts

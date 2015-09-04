@@ -3,29 +3,32 @@ extends ../layouts/main.jade
 block scripts
   script(src='https://maps.googleapis.com/maps/api/js?v=3.exp')
   script(src='/js/jquery-2.1.4.min.js')
+  script(type='text/javascript')
+    include ../scripts/newPost.js
 
 block content
   .container: .row: .col-md-12
     h1 我要發問！
     hr
-    form.form-horizontal
+    form.form-horizontal(method='post')
       .form-group
         label.col-sm-2.control-label 問題標題
-        .col-sm-10
-          input.form-control
+        .col-sm-9
+          input.form-control(id='post-title', type='text', name='title')
 
       .form-group
         label.col-sm-2.control-label 問題內容
-        .col-sm-10
-          textarea.form-control(rows='5', style='resize:vertical')
+        .col-sm-9
+          textarea.form-control(id='post-content', rows='5', style='resize:vertical', name='content')
 
       .form-group
         label.col-sm-2.control-label 地點
-        .col-sm-10
-          input.form-control
+        .col-sm-9
+          input.form-control(id='post-location', type='text', name='location')
 
       .form-group
-        .col-sm-offset-2.col-sm-10
-          button.btn.btn-default(type='submit') 送出
+        .col-sm-offset-2.col-sm-9
+          button.btn.btn-default(id='post-submit', type='submit') 送出
+          span.err-red(id='err-text')
     
     

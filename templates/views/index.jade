@@ -1,14 +1,16 @@
 extends ../layouts/main.jade
 
 mixin posts(data)
-  .post-list
-    each p in data
-      .post-cards.well
-        .title= p.title
-        .content= p.content
+  if data && data.length
+    .post-list
+      each p in data
+        a.post-cards.well(href='/post/'+p.id)
+          .title= p.title
+          .content= p.content
+  else
+    p 目前沒有問題
 
 block content
-  - var posts = [{ title: '問題一', content: '問題內容問題內容問題內容問題內容問題內容' }, { title: '問題二', content: '問題內容' }];
   .container: .row: .col-md-12
     h1 問題列表
     hr
