@@ -23,13 +23,64 @@ app.use(function(req, res, next) {
 
 app.use(cookieParser());
 
+app.locals.moment = require('moment');
+app.locals.moment.locale('zh-TW');
+
 app.route('/')
   .get(function(req, res) {
     db.post.getAll()
       .then(function(posts) {
         res.render('views/index', { posts: posts.toJSON() });
       })
+      .catch(logErrAndRedirect(res, '/'));
   });
+
+var postHandler = {
+  'comment-main': function(req, res, data) {
+    var store = {
+      post_id: data.postId,
+      user_id: 'yangchuck@gmail.com',
+      content: data.content,
+      score: 0
+    };
+
+    db.comment.create(store)
+      .then(function() {
+        res.redirect('back');
+      })
+      .catch(logErrAndRedirect(res, 'back'));
+  },
+
+  'comment-ans': function(req, res, data) {
+    var store = {
+      answer_id: data.answerId,
+      user_id: 'yangchuck@gmail.com',
+      content: data.content,
+      score: 0
+    };
+
+    db.comment.create(store)
+      .then(function() {
+        res.redirect('back');
+      })
+      .catch(logErrAndRedirect(res, 'back'));
+  },
+
+  'answer': function(req, res, data) {
+    var store = {
+      post_id: data.postId,
+      user_id: 'yangchuck@gmail.com',
+      content: data.content,
+      score: 0
+    };
+
+    db.answer.create(store)
+      .then(function() {
+        res.redirect('back');
+      })
+      .catch(logErrAndRedirect(res, 'back'));
+  }
+};
 
 app.route('/post/:id')
   .get(function(req, res) {
@@ -44,33 +95,56 @@ app.route('/post/:id')
 
     db.post.get(id)
       .then(function(post) {
-        res.render('views/post', { post: post.toJSON() });
-      });
-  });
-
-app.route('/post/new')
-  .post(function(req, res) {
-    // check req.body.title and content
-    var body = req.body;
-    var data = {
-      user_id: 'yangchuck@gmail.com',
-      title: body.title,
-      content: body.content,
-      location: body.location,
-      score: 0
-    };
-
-    db.post.create(data)
-      .then(function(p) {
-        var post = p.toJSON();
-        // if successfully saved, redirect to that post
-        res.redirect('/post/'+post.id);
+        var p = post.toJSON();
+        p.comments = post.related('comments').toJSON();
+        p.answers = post.related('answers').toJSON();
+        res.render('views/post', { post: p });
       })
-      .catch(function(err) {
-        console.error(err);
-        res.redirect('/');
-      });
+      .catch(logErrAndRedirect(res, '/'));
+  })
+  .post(function(req, res) {
+    if (req.params.id == 'new') {
+      return handleNewPost(req, res);
+    }
+
+    var id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.redirect('/');
+    }
+
+    var body = req.body;
+    if (!postHandler[body.type]) return res.send('invalid post');
+
+    body.postId = id;
+    postHandler[body.type](req, res, body);
   });
+
+function handleNewPost(req, res) {
+  // check req.body.title and content
+  var body = req.body;
+  var data = {
+    user_id: 'yangchuck@gmail.com',
+    title: body.title,
+    content: body.content,
+    location: body.location,
+    score: 0
+  };
+
+  db.post.create(data)
+    .then(function(p) {
+      var post = p.toJSON();
+      // if successfully saved, redirect to that post
+      res.redirect('/post/'+post.id);
+    })
+    .catch(logErrAndRedirect(res, '/'));
+}
+
+function logErrAndRedirect(res, path) {
+  return function(err) {
+    console.log(err);
+    res.redirect('/');
+  };
+}
 
 app.route('/api')
   .post(function(req, res) {

@@ -1,14 +1,33 @@
 extends ../layouts/main.jade
 
+mixin editDate(created, updated)
+  - var diff = (new Date()).getTime() - updated.getTime()
+  if diff > 604800000
+    span #{moment(updated).format('L')}
+  else 
+    span #{moment(updated).fromNow()}
+  if updated > created
+    span.glyphicon.glyphicon-pencil
+
 mixin posts(data)
   if data && data.length
     .post-list
       each p in data
-        a.post-cards.well(href='/post/'+p.id)
+        .post-card.col-lg-3.col-md-4.col-sm-6.col-xs-12: a.well(href='/post/'+p.id)
           .title= p.title
           .content= p.content
+          .attribution 
+            span= p.user_id
+            span.date
+              +editDate(p.created_at, p.updated_at)
   else
     p 目前沒有問題
+
+block scripts
+  script(src='/js/jquery-2.1.4.min.js')
+  script(src='/js/masonry.pkgd.min.js')
+  script(type='text/javascript')
+    include ../scripts/index.js
 
 block content
   .container: .row: .col-md-12

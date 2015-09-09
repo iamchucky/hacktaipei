@@ -1,28 +1,19 @@
-var config = require('../config');
-var knex = require('knex')(config.db);
-var bs = require('bookshelf')(knex);
-
-var Post = bs.Model.extend({ 
-  tableName: 'posts', 
-  hasTimestamps: ['created_at', 'updated_at'] 
-});
-
-var Posts = bs.Collection.extend({ model: Post });
+var m = require('./m');
 
 module.exports = {
   getAll: function() {
-    return Posts.forge().fetch();
+    return m.Posts.forge().fetch();
   },
 
   get: function(id) {
-    return Post.where({ id: id }).fetch();
+    return m.Post.where({ id: id }).fetch({ withRelated: ['comments', 'answers', 'answers.comments'] });
   },
 
   create: function(data) {
-    return Post.forge(data).save();
+    return m.Post.forge(data).save();
   },
 
   remove: function(post) {
-    return Post.where({ id: post.id }).destroy();
+    return m.Post.where({ id: post.id }).destroy();
   }
 };

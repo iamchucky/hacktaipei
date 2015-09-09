@@ -12,7 +12,8 @@ exports.seed = function(knex, Promise) {
         title: '問題一',
         content: '有沒有第一次XX就上手的八卦？',
         score: 0,
-        created_at: new Date()
+        created_at: new Date(),
+        updated_at: new Date()
       }]);
     })
     .then(function() {

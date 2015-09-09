@@ -22,7 +22,7 @@ exports.up = function(knex, Promise) {
     t.integer('score').notNull();
 
     t.dateTime('created_at').notNull();
-    t.dateTime('updated_at').nullable();
+    t.dateTime('updated_at').notNull();
 
   }).createTable('answers', function(t) {
 
@@ -33,8 +33,10 @@ exports.up = function(knex, Promise) {
     t.string('user_id').references('users.id').notNull();
     t.text('content').notNull();
 
+    t.integer('score').notNull();
+
     t.dateTime('created_at').notNull();
-    t.dateTime('updated_at').nullable();
+    t.dateTime('updated_at').notNull();
 
   }).createTable('comments', function(t) {
 
@@ -45,9 +47,10 @@ exports.up = function(knex, Promise) {
 
     t.string('user_id').references('users.id').notNull();
     t.text('content').notNull();
+    t.integer('score').notNull();
 
     t.dateTime('created_at').notNull();
-    t.dateTime('updated_at').nullable();
+    t.dateTime('updated_at').notNull();
 
   }).createTable('tags', function(t) {
     
