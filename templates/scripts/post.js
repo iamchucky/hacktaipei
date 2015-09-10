@@ -1,52 +1,49 @@
-$(function() {
+var map;
 
-  var map;
+window.initMap = function() {
+  var mapCanvas = $('#inpost-map-canvas');
 
-  window.initMap = function() {
-    var mapCanvas = $('#inpost-map-canvas');
-
-    if (mapCanvas[0]) {
-      var lat = parseFloat(mapCanvas.attr('lat'));
-      var lng = parseFloat(mapCanvas.attr('lng'));
-      var pos = { lat: lat, lng: lng };
-      map = new google.maps.Map(mapCanvas[0], {
-        zoom: 15,
-        center: pos,
-        disableDefaultUI: true,
-        streetViewControl: true
-      });
-      var marker = new google.maps.Marker({
-          map: map,
-          animation: google.maps.Animation.DROP,
-          position: pos
-      });
-    }
+  if (mapCanvas[0]) {
+    var lat = parseFloat(mapCanvas.attr('lat'));
+    var lng = parseFloat(mapCanvas.attr('lng'));
+    var pos = { lat: lat, lng: lng };
+    map = new google.maps.Map(mapCanvas[0], {
+      zoom: 15,
+      center: pos,
+      disableDefaultUI: true,
+      streetViewControl: true
+    });
+    var marker = new google.maps.Marker({
+        map: map,
+        animation: google.maps.Animation.DROP,
+        position: pos
+    });
   }
-  
-  window.showCommentForm = function(elem) {
-    if (!elem.nextSibling) return;
+}
 
-    elem.style.display = 'none';
-    elem.nextSibling.style.display = 'block';
-  };
+window.showCommentForm = function(elem) {
+  if (!elem.nextSibling) return;
 
-  window.submitForm = function(elem) {
-    if (elem.parentNode.parentNode.nodeName !== 'FORM') return;
-    if (elem.previousSibling.nodeName !== 'TEXTAREA') return;
+  elem.style.display = 'none';
+  elem.nextSibling.style.display = 'block';
+};
 
-    var form = elem.parentNode.parentNode;
-    var commentContent = elem.previousSibling;
-    if (!commentContent.value.trim()) return;
-    $(form).submit();
-  };
+window.submitForm = function(elem) {
+  if (elem.parentNode.parentNode.nodeName !== 'FORM') return;
+  if (elem.previousSibling.nodeName !== 'TEXTAREA') return;
 
-  window.castVote = function(elem, updown) {
-    if (elem.parentNode.parentNode.className !== 'score-container') return;
-    if (elem.parentNode.parentNode.firstChild.nodeName !== 'FORM') return;
+  var form = elem.parentNode.parentNode;
+  var commentContent = elem.previousSibling;
+  if (!commentContent.value.trim()) return;
+  $(form).submit();
+};
 
-    var form = elem.parentNode.parentNode.firstChild;
-    form.updown.value = updown;
-    $(form).submit();
-  }
+window.castVote = function(elem, updown) {
+  if (elem.parentNode.parentNode.className !== 'score-container') return;
+  if (elem.parentNode.parentNode.firstChild.nodeName !== 'FORM') return;
 
-});
+  var form = elem.parentNode.parentNode.firstChild;
+  form.updown.value = updown;
+  $(form).submit();
+}
+

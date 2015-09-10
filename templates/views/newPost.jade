@@ -1,10 +1,10 @@
 extends ../layouts/main.jade
 
 block scripts
-  script(src='https://maps.googleapis.com/maps/api/js?v=3.exp&language=zh_TW&callback=initMap', async, defer)
   script(src='/js/jquery-2.1.4.min.js')
   script(type='text/javascript')
     include ../scripts/newPost.js
+  script(src='https://maps.googleapis.com/maps/api/js?v=3.exp&language=zh_TW&callback=initMap', async, defer)
 
 block content
   .container: .row: .col-md-12
