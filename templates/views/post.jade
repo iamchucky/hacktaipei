@@ -44,17 +44,56 @@ mixin answerForm()
       textarea.form-control(rows='5', style='resize:vertical', name='content', placeholder='我知道解答...')
       span.input-group-addon.btn.btn-default(onclick='submitForm(this)') 送出
 
+mixin postText(data, isPost)
+  table.post-text: tbody: tr
+    if isPost
+      +score(data.score, 'main')
+    else
+      +score(data.score, 'ans', data.id)
+
+    td
+      p.post-content= data.content
+
+      if data.location
+        p.post-location 
+          span.glyphicon.glyphicon-map-marker
+          span(style='margin-left:5px;')= data.location
+
+      if isPost
+        +comments(data.comments, 'main')
+      else
+        +comments(data.comments, 'ans', data.id)
+
+    if data.lat
+      td.map-container
+        .well: div(id='inpost-map-canvas', lat=data.lat, lng=data.lng)
+
+      
+
+
 mixin answers(data)
   .answers
     if data && data.length
       each a in data
         hr
-        .post-text
-          p= a.content
-          +comments(a.comments, 'ans', a.id)
+        +postText(a)
+
+mixin score(score, type, answerId)
+  td.score-container
+    form.vote-form(method='post', style='display:none;')
+      input(style='display:none', name='type', value='vote-'+type)
+      input(style='display:none', name='answerId', value=answerId)
+      input(style='display:none', name='updown', value='up')
+    .vote
+      span.glyphicon.glyphicon-triangle-top(onclick='castVote(this, "up")')
+    .score
+      span= score
+    .vote
+      span.glyphicon.glyphicon-triangle-bottom(onclick='castVote(this, "down")')
+
 
 block scripts
-  script(src='https://maps.googleapis.com/maps/api/js?v=3.exp')
+  script(src='https://maps.googleapis.com/maps/api/js?v=3.exp&language=zh_TW&callback=initMap', async, defer)
   script(src='/js/jquery-2.1.4.min.js')
   script(type='text/javascript')
     include ../scripts/post.js
@@ -63,16 +102,7 @@ block content
   .container: .row: .col-md-12
     h1= post.title
     hr
-    .post-text
-      p= post.content
-
-    if post.location
-      span= post.location
-
-    if post.lat
-      .well: div(id='inpost-map-canvas')
-
-    +comments(post.comments, 'main')
+    +postText(post, true)
 
     if post.answers && post.answers.length 
       .answers-container

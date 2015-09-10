@@ -2,20 +2,27 @@ $(function() {
 
   var map;
 
-  function initialize() {
+  window.initMap = function() {
     var mapCanvas = $('#inpost-map-canvas');
 
     if (mapCanvas[0]) {
+      var lat = parseFloat(mapCanvas.attr('lat'));
+      var lng = parseFloat(mapCanvas.attr('lng'));
+      var pos = { lat: lat, lng: lng };
       map = new google.maps.Map(mapCanvas[0], {
-        zoom: 12,
-        center: { lat: 25.08, lng: 121.55 },
-        disableDefaultUI: true
+        zoom: 15,
+        center: pos,
+        disableDefaultUI: true,
+        streetViewControl: true
+      });
+      var marker = new google.maps.Marker({
+          map: map,
+          animation: google.maps.Animation.DROP,
+          position: pos
       });
     }
   }
   
-  google.maps.event.addDomListener(window, 'load', initialize);
-
   window.showCommentForm = function(elem) {
     if (!elem.nextSibling) return;
 
@@ -32,5 +39,14 @@ $(function() {
     if (!commentContent.value.trim()) return;
     $(form).submit();
   };
+
+  window.castVote = function(elem, updown) {
+    if (elem.parentNode.parentNode.className !== 'score-container') return;
+    if (elem.parentNode.parentNode.firstChild.nodeName !== 'FORM') return;
+
+    var form = elem.parentNode.parentNode.firstChild;
+    form.updown.value = updown;
+    $(form).submit();
+  }
 
 });

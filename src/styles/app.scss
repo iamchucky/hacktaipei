@@ -66,15 +66,58 @@ tbody {
 
 .post-text {
   margin: 2em 0;
+  width: 100%;
 
-  p {
+  td {
+    vertical-align: top;
+  }
+
+  .score-container {
+    text-align: center;
+    font-size: 1.75em;
+    width: 4em;
+  }
+
+  p.post-content {
     font-size: 1.2em;
     white-space: pre-wrap;
   }
+
+  p.post-location {
+    color: gray;
+  }
+
+  .map-container {
+    width: 300px;
+
+    .well {
+      padding: 0px;
+      margin-bottom: 0px;
+    }
+  }
 }
 
+.post-text > tbody, 
+.post-text > tbody > tr > td {
+  border: none;
+}
+
+.vote {
+  color: gray;
+
+  span {
+    cursor: pointer;
+  }
+
+  span:hover {
+    color: initial;
+  }
+}
+
+
 .comments-container {
-  margin-top: 32px;
+  margin-top: 2em;
+  margin-right: 2em;
 
   .comment-actions {
     width: 15px;
@@ -106,4 +149,8 @@ tbody {
 
 .answers-container {
   margin-top: 48px;
+}
+
+.answer-form {
+  margin-bottom: 50px;
 }

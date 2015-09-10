@@ -16,8 +16,8 @@ exports.up = function(knex, Promise) {
     t.string('title').notNull();
     t.text('content').notNull();
     t.string('location').nullable();
-    t.float('lat').nullable();
-    t.float('lng').nullable();
+    t.string('lat').nullable();
+    t.string('lng').nullable();
 
     t.integer('score').notNull();
 

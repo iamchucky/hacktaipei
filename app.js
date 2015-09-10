@@ -35,35 +35,37 @@ app.route('/')
       .catch(logErrAndRedirect(res, '/'));
   });
 
+function addComment(req, res, post_id, answer_id, user_id, content) {
+  var store = {
+    post_id: post_id,
+    answer_id: answer_id,
+    user_id: user_id,
+    content: content,
+    score: 0
+  };
+
+  db.comment.create(store)
+    .then(function() {
+      res.redirect('back');
+    })
+    .catch(logErrAndRedirect(res, 'back'));
+}
+
+function castVote(req, res, type, postId, value) {
+  db[type].castVote(postId, value)
+    .then(function(p) {
+      res.redirect('back');
+    })
+    .catch(logErrAndRedirect(res, 'back'));
+}
+
 var postHandler = {
   'comment-main': function(req, res, data) {
-    var store = {
-      post_id: data.postId,
-      user_id: 'yangchuck@gmail.com',
-      content: data.content,
-      score: 0
-    };
-
-    db.comment.create(store)
-      .then(function() {
-        res.redirect('back');
-      })
-      .catch(logErrAndRedirect(res, 'back'));
+    addComment(req, res, data.postId, null, 'yangchuck@gmail.com', data.content);
   },
 
   'comment-ans': function(req, res, data) {
-    var store = {
-      answer_id: data.answerId,
-      user_id: 'yangchuck@gmail.com',
-      content: data.content,
-      score: 0
-    };
-
-    db.comment.create(store)
-      .then(function() {
-        res.redirect('back');
-      })
-      .catch(logErrAndRedirect(res, 'back'));
+    addComment(req, res, null, data.answerId, 'yangchuck@gmail.com', data.content);
   },
 
   'answer': function(req, res, data) {
@@ -79,7 +81,16 @@ var postHandler = {
         res.redirect('back');
       })
       .catch(logErrAndRedirect(res, 'back'));
+  },
+
+  'vote-main': function(req, res, data) {
+    castVote(req, res, 'post', data.postId, data.updown == 'up' ? 1:-1);
+  },
+
+  'vote-ans': function(req, res, data) {
+    castVote(req, res, 'answer', data.answerId, data.updown == 'up' ? 1:-1);
   }
+
 };
 
 app.route('/post/:id')
@@ -129,6 +140,10 @@ function handleNewPost(req, res) {
     location: body.location,
     score: 0
   };
+  if (body.lat && body.lng) {
+    data.lat = body.lat;
+    data.lng = body.lng;
+  }
 
   db.post.create(data)
     .then(function(p) {
