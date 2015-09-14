@@ -1,0 +1,23 @@
+extends ../layouts/map.jade
+
+include ../mixins/post.jade
+
+block scripts
+  script(src='/js/jquery-2.1.4.min.js')
+  script(type='text/javascript')
+    include ../scripts/indexMap.js
+  script(src='https://maps.googleapis.com/maps/api/js?v=3.exp&language=zh_TW&callback=initMap', async, defer)
+
+block leftPane
+  .left-pane
+    h1 問題列表
+    hr
+
+block map
+  .map-pane
+    #map-canvas
+
+block rightPane
+  - var post = { title: '有沒有八卦', content: '有沒有', score: 0 }
+  .right-pane
+    +post(post)

@@ -30,7 +30,7 @@ app.route('/')
   .get(function(req, res) {
     db.post.getAll()
       .then(function(posts) {
-        res.render('views/index', { posts: posts.toJSON() });
+        res.render('views/indexMap', { posts: posts.toJSON() });
       })
       .catch(logErrAndRedirect(res, '/'));
   });

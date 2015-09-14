@@ -1,0 +1,96 @@
+include utils.jade
+
+mixin commentForm(type, answerId)
+  form.comment-form(method='post', style='display:none;')
+    input(style='display:none', name='type', value='comment-'+type)
+    input(style='display:none', name='answerId', value=answerId)
+    .input-group
+      textarea.form-control(rows='5', style='resize:vertical', name='content', placeholder='我是這樣覺得拉齁...')
+      span.input-group-addon.btn.btn-default(onclick='submitForm(this)') 留言
+
+mixin comments(data, type, answerId)
+  .comments-container
+    if data && data.length
+      table.comments-list.table: tbody
+        each p in data
+          tr
+            td.comment-actions
+              if p.score 
+                - var css = p.score < 5 ? 'cool' : p.score <= 15 ? 'warm' : p.score <= 30 ? 'hot' : 'supernova';
+                span(class=css)= p.score
+
+            td.comment-text.attribution
+              span.comment-copy= p.content + ' – '
+              span.comment-user= p.user_id
+              span.date
+                +editDate(p.created_at, p.updated_at)
+
+    a(onclick='showCommentForm(this)') 新增留言
+    +commentForm(type, answerId)
+  
+mixin answerForm()
+  form.answer-form(method='post')
+    input(style='display:none', name='type', value='answer')
+    .input-group
+      textarea.form-control(rows='5', style='resize:vertical', name='content', placeholder='我知道解答...')
+      span.input-group-addon.btn.btn-default(onclick='submitForm(this)') 送出
+
+mixin postText(data, isPost)
+  table.post-text: tbody: tr
+    if isPost
+      +score(data.score, 'main')
+    else
+      +score(data.score, 'ans', data.id)
+
+    td
+      p.post-content= data.content
+
+      if data.location
+        p.post-location 
+          span.glyphicon.glyphicon-map-marker
+          span(style='margin-left:5px;')= data.location
+
+      if isPost
+        +comments(data.comments, 'main')
+      else
+        +comments(data.comments, 'ans', data.id)
+
+    if data.lat
+      td.map-container
+        .well: div(id='inpost-map-canvas', lat=data.lat, lng=data.lng)
+
+      
+
+
+mixin answers(data)
+  .answers
+    if data && data.length
+      each a in data
+        hr
+        +postText(a)
+
+mixin score(score, type, answerId)
+  td.score-container
+    form.vote-form(method='post', style='display:none;')
+      input(style='display:none', name='type', value='vote-'+type)
+      input(style='display:none', name='answerId', value=answerId)
+      input(style='display:none', name='updown', value='up')
+    .vote
+      span.glyphicon.glyphicon-triangle-top(onclick='castVote(this, "up")')
+    .score
+      span= score
+    .vote
+      span.glyphicon.glyphicon-triangle-bottom(onclick='castVote(this, "down")')
+
+mixin post(post)
+  h1= post.title
+  hr
+  +postText(post, true)
+
+  if post.answers && post.answers.length 
+    .answers-container
+      h2= post.answers.length + ' 回答'
+      +answers(post.answers)
+
+  hr
+  +answerForm()

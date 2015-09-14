@@ -3,7 +3,7 @@ $font-family-sans-serif: "Helvetica Neue", Helvetica, Arial, "Noto Sans CJK TC",
 
 @import "bootstrap";
 
-body {
+body.list-layout {
   // for fixed top navbar
   padding-top: 70px;
 }
@@ -22,6 +22,68 @@ tbody {
   tr > td {
     border-top: none;
     border-bottom: 1px solid #f0f0f0;
+  }
+}
+
+$gray-background: #e8e8e8;
+$left-pane-width: 400px;
+$right-pane-width: 500px;
+$pane-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+.map-layout > .container-fluid,
+.left-pane, .right-pane, .map-pane {
+  position: fixed;
+  height: calc(100% - 50px);
+}
+
+.map-layout > .container-fluid {
+  padding: 0;
+}
+
+.map-layout {
+  padding-top: 50px;
+  height: 100%;
+  position: fixed;
+
+  nav {
+    margin-bottom: 0px;
+    box-shadow: $pane-box-shadow;
+  }
+
+  .left-pane {
+    width: $left-pane-width;
+    padding: 15px;
+
+    overflow-y: auto;
+
+    background-color: $gray-background;
+    box-shadow: $pane-box-shadow;
+
+    hr {
+      border-top: 1px solid gray;
+    }
+  }
+
+  .map-pane {
+    padding-left: $left-pane-width;
+    width: 100%;
+    left: 0px;
+
+    #map-canvas {
+      height: 100%;
+    }
+  }
+
+  .right-pane {
+    width: $right-pane-width;
+    padding: 15px;
+
+    overflow-y: auto;
+
+    background-color: white;
+    box-shadow: $pane-box-shadow;
+
+    right: 0px;
+    transition: 0.2s;
   }
 }
 

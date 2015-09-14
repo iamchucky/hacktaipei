@@ -1,0 +1,9 @@
+mixin editDate(created, updated)
+  - var diff = (new Date()).getTime() - updated.getTime()
+  if diff > 604800000
+    span #{moment(updated).format('L')}
+  else 
+    span #{moment(updated).fromNow()}
+  if updated > created
+    span.glyphicon.glyphicon-pencil
+

@@ -3,13 +3,17 @@ html
   head
     title Hack.Taipei
     link(rel='stylesheet', href='/styles/app.css')
-  body.list-layout
-    nav.navbar.navbar-default.navbar-fixed-top
-      .container
+  body.map-layout
+    nav.navbar.navbar-inverse.navbar-fixed-top
+      .container-fluid
         .navbar-header
           a.navbar-brand(href='/') Hack.Taipei
         .nav.navbar-nav.navbar-right
           a.btn.btn-default.navbar-btn(href='/post/new') 我要發問
-      
-    block content
+
+    .container-fluid
+      block map
+      block leftPane
+      block rightPane
+
     block scripts
