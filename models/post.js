@@ -1,7 +1,8 @@
 var m = require('./m');
+var Promise = require('bluebird');
 
 function latestOrdering(qb) {
-  qb.orderByRaw('created_at DESC, score DESC');
+  qb.orderByRaw('created_at DESC');
 }
 
 module.exports = {
@@ -14,23 +15,37 @@ module.exports = {
       withRelated: [ {
         'comments': latestOrdering,
         'answers': latestOrdering,
-        'answers.comments': latestOrdering
-      } ] });
+        'answers.comments': latestOrdering,
+        'answers.score': function() {},
+        'score': function() {}
+      } ] })
+    .then(function(post) {
+      var p = post.toJSON();
+      p.comments = post.related('comments').toJSON();
+      p.answers = post.related('answers').toJSON();
+      p.score = post.related('score').toJSON();
+      p.score = p.score.score;
+      for (var i = 0; i < p.answers.length; ++i) {
+        p.answers[i].score = p.answers[i].score.score;
+      }
+      return Promise.resolve(p);
+    });
   },
 
   create: function(data) {
-    return m.Post.forge(data).save();
-  },
+    var score = {
+      users: {},
+      score: data.score
+    };
 
-  castVote: function(id, value) {
-    return m.bookshelf.transaction(function(t) {
-      return m.Post.where({ id: id })
-        .fetch({ transacting: t })
-        .then(function(p) {
-          var newScore = p.get('score') + value;
-          return m.Post.forge(p).save({ score: newScore }, { patch: true, transacting: t });
-        });
-    });
+    delete data.score;
+    return m.Post.forge(data).save()
+      .then(function(p) {
+        var postId = p.get('id');
+        score.post_id = postId;
+
+        return m.Score.forge(score).save();
+      });
   },
 
   remove: function(post) {

@@ -11,12 +11,22 @@ exports.seed = function(knex, Promise) {
         user_id: 'yangchuck@gmail.com',
         title: '問題一',
         content: '有沒有第一次XX就上手的八卦？',
-        score: 0,
         created_at: new Date(),
         updated_at: new Date()
       }]);
     })
     .then(function() {
       return knex.raw("select setval('\"posts_id_seq\"',?);", [1]);
+    })
+    .then(function() {
+      return knex('scores').insert([{
+        id: 1,
+        users: {},
+        score: 0,
+        post_id: 1
+      }]);
+    })
+    .then(function() {
+      return knex.raw("select setval('\"scores_id_seq\"',?);", [1]);
     });
 };

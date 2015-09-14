@@ -51,8 +51,8 @@ function addComment(req, res, post_id, answer_id, user_id, content) {
     .catch(logErrAndRedirect(res, 'back'));
 }
 
-function castVote(req, res, type, postId, value) {
-  db[type].castVote(postId, value)
+function castVote(req, res, type, postId, userId, value) {
+  db.score.castVote(type, postId, userId, value)
     .then(function(p) {
       res.redirect('back');
     })
@@ -84,11 +84,11 @@ var postHandler = {
   },
 
   'vote-main': function(req, res, data) {
-    castVote(req, res, 'post', data.postId, data.updown == 'up' ? 1:-1);
+    castVote(req, res, 'post', data.postId, data.userId, data.updown == 'up' ? 1:-1);
   },
 
   'vote-ans': function(req, res, data) {
-    castVote(req, res, 'answer', data.answerId, data.updown == 'up' ? 1:-1);
+    castVote(req, res, 'answer', data.answerId, data.userId, data.updown == 'up' ? 1:-1);
   }
 
 };
@@ -106,10 +106,7 @@ app.route('/post/:id')
 
     db.post.get(id)
       .then(function(post) {
-        var p = post.toJSON();
-        p.comments = post.related('comments').toJSON();
-        p.answers = post.related('answers').toJSON();
-        res.render('views/post', { post: p });
+        res.render('views/post', { post: post });
       })
       .catch(logErrAndRedirect(res, '/'));
   })
@@ -127,6 +124,7 @@ app.route('/post/:id')
     if (!postHandler[body.type]) return res.send('invalid post');
 
     body.postId = id;
+    body.userId = 'yangchuck@gmail.com';
     postHandler[body.type](req, res, body);
   });
 

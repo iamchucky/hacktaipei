@@ -19,8 +19,6 @@ exports.up = function(knex, Promise) {
     t.string('lat').nullable();
     t.string('lng').nullable();
 
-    t.integer('score').notNull();
-
     t.dateTime('created_at').notNull();
     t.dateTime('updated_at').notNull();
 
@@ -32,8 +30,6 @@ exports.up = function(knex, Promise) {
 
     t.string('user_id').references('users.id').notNull();
     t.text('content').notNull();
-
-    t.integer('score').notNull();
 
     t.dateTime('created_at').notNull();
     t.dateTime('updated_at').notNull();
@@ -52,6 +48,16 @@ exports.up = function(knex, Promise) {
     t.dateTime('created_at').notNull();
     t.dateTime('updated_at').notNull();
 
+  }).createTable('scores', function(t) {
+
+    t.increments().primary();
+
+    t.json('users').notNull();
+    t.integer('score').notNull();
+
+    t.integer('post_id').references('posts.id').nullable();
+    t.integer('answer_id').references('answers.id').nullable();
+
   }).createTable('tags', function(t) {
     
     t.increments().primary();
@@ -64,6 +70,7 @@ exports.up = function(knex, Promise) {
 
 exports.down = function(knex, Promise) {
   return knex.schema.dropTable('tags')
+    .dropTable('scores')
     .dropTable('comments')
     .dropTable('answers')
     .dropTable('posts')

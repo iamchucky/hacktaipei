@@ -6,22 +6,28 @@ module.exports = {
   },
 
   get: function(id) {
-    return m.Answer.where({ id: id }).fetch({ withRelated: ['comments'] });
+    return m.Answer.where({ id: id }).fetch({ withRelated: ['comments', 'score'] })
+      .then(function(post) {
+        var p = post.toJSON();
+        p.score = p.score.score;
+        return Promise.reolve(p);
+      });
   },
 
   create: function(data) {
-    return m.Answer.forge(data).save();
-  },
+    var score = {
+      users: {},
+      score: data.score
+    };
 
-  castVote: function(id, value) {
-    return m.bookshelf.transaction(function(t) {
-      return m.Answer.where({ id: id })
-        .fetch({ transacting: t })
-        .then(function(p) {
-          var newScore = p.get('score') + value;
-          return m.Answer.forge(p).save({ score: newScore }, { patch: true, transacting: t });
-        });
-    });
+    delete data.score;
+    return m.Answer.forge(data).save()
+      .then(function(p) {
+        var postId = p.get('id');
+        score.answer_id = postId;
+
+        return m.Score.forge(score).save();
+      });
   },
 
   remove: function(post) {
