@@ -20,21 +20,6 @@ app.use(function(req, res, next) {
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
-app.set('views', './templates');
-app.set('view engine', 'jade');
-
-app.locals.moment = require('moment');
-app.locals.moment.locale('zh-TW');
-
-app.route('/')
-  .get(function(req, res) {
-    db.post.getAll()
-      .then(function(posts) {
-        res.render('views/index', { posts: posts.toJSON() });
-      })
-      .catch(logErrAndRedirect(res, '/'));
-  });
-
 function addComment(req, res, post_id, answer_id, user_id, content) {
   var store = {
     post_id: post_id,
@@ -158,11 +143,6 @@ function logErrAndRedirect(res, path) {
     res.redirect('/');
   };
 }
-
-app.route('/api')
-  .post(function(req, res) {
-    res.send('success');
-  });
 
 var server = app.listen(80, function() {
   var host = server.address().address;

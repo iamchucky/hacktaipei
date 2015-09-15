@@ -83,17 +83,18 @@ mixin score(score, type, answerId)
       span.glyphicon.glyphicon-triangle-bottom(onclick='castVote(this, "down")')
 
 mixin post(post)
-  h1= post.title
-  hr
-  +postText(post, true)
+  if post
+    h1= post.title
+    hr
+    +postText(post, true)
 
-  if post.answers && post.answers.length 
-    .answers-container
-      h2= post.answers.length + ' 回答'
-      +answers(post.answers)
+    if post.answers && post.answers.length 
+      .answers-container
+        h2= post.answers.length + ' 回答'
+        +answers(post.answers)
 
-  hr
-  +answerForm()
+    hr
+    +answerForm()
 
 mixin postWell(p)
   a.well(href='/post/'+p.id)

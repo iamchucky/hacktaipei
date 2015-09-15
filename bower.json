@@ -16,6 +16,8 @@
     "tests"
   ],
   "dependencies": {
+    "angular": "angularjs#~1.4.5",
+    "angular-bootstrap": "~0.13.4",
     "bootstrap-sass": "bootstrap-sass-official#~3.3.5"
   }
 }

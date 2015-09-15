@@ -1,0 +1,16 @@
+extends ../layouts/map.jade
+
+block scripts
+  script(src='/lib/angular/angular.min.js')
+  script(src='/lib/angular/router.es5.js')
+  script(src='/lib/bootstrap/ui-bootstrap-tpls.min.js')
+  script(src='/js/app.js')
+  script(type='text/javascript')
+    include ../scripts/indexMap.js
+  script(src='https://maps.googleapis.com/maps/api/js?v=3.exp&language=zh_TW&callback=initMap', async, defer)
+
+block content
+  .left-pane(ng-viewport='left')
+  .map-pane(ng-viewport='map')
+  .right-pane(ng-viewport='right')
+

@@ -5,6 +5,7 @@
   "description": "Hack Taipei website",
   "devDependencies": {
     "gulp": "^3.8.7",
+    "gulp-jade": "^1.1.0",
     "gulp-sass": "^2.0.4"
   },
   "dependencies": {

@@ -1,0 +1,35 @@
+.container: .row: .col-md-12
+  h1 我要發問！
+  hr
+  form.form-horizontal(method='post')
+    .form-group
+      label.col-sm-2.control-label 問題標題
+      .col-sm-9
+        input.form-control(id='post-title', type='text', name='title')
+
+    .form-group
+      label.col-sm-2.control-label 問題內容
+      .col-sm-9
+        textarea.form-control(id='post-content', rows='5', style='resize:vertical', name='content')
+
+    .form-group
+      label.col-sm-2.control-label 地點
+      .col-sm-9
+        input.form-control(id='post-location', type='text', name='location')
+
+    .form-group
+      label.col-sm-2.control-label 座標
+      .col-sm-9
+        input.form-control(id='lat', type='text', name='lat', style='display:none')
+        input.form-control(id='lng', type='text', name='lng', style='display:none')
+        .map
+          div(id='map-canvas', style='height:300px;')
+          div(id='latlng', style='position:absolute; top:0; background-color:white;')
+        p 在地圖上點一下即可放下標記, 在標記上點兩下可移除標記, 也可以拖曳標記調整
+
+    .form-group
+      .col-sm-offset-2.col-sm-9
+        button.btn.btn-default(id='post-submit', type='submit') 送出
+        span.err-red(id='err-text')
+  
+  
