@@ -1,0 +1,10 @@
+.post-list
+  h1 問題列表
+  hr
+  .post-card: a.well(ng-repeat='p in postList.posts')
+    .title {{ p.title }}
+    .content {{ p.content }}
+    .attribution 
+      span {{ p.user_id }}
+      span.date
+        span(am-time-ago="p.created_at") 

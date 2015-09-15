@@ -1,16 +1,34 @@
-extends ../layouts/map.jade
+doctype html
+html
+  head
+    title Hack.Taipei
+    link(rel='stylesheet', href='/styles/app.css')
+  body.map-layout(ng-app='app', ng-controller='AppController as appCtrl')
+    nav.navbar.navbar-inverse.navbar-fixed-top
+      .container-fluid
+        .navbar-header
+          a.navbar-brand(href='/') Hack.Taipei
+        .nav.navbar-nav.navbar-right
+          a.btn.btn-default.navbar-btn(href='/post/new') 我要發問
 
-block scripts
-  script(src='/lib/angular/angular.min.js')
-  script(src='/lib/angular/router.es5.js')
-  script(src='/lib/bootstrap/ui-bootstrap-tpls.min.js')
-  script(src='/js/app.js')
-  script(type='text/javascript')
-    include ../scripts/indexMap.js
-  script(src='https://maps.googleapis.com/maps/api/js?v=3.exp&language=zh_TW&callback=initMap', async, defer)
+    .container-fluid
+      .map-pane(ng-viewport='map')
+      .left-pane(ng-viewport='left')
+      .right-pane(ng-viewport='right')
 
-block content
-  .left-pane(ng-viewport='left')
-  .map-pane(ng-viewport='map')
-  .right-pane(ng-viewport='right')
+    script(src='/lib/angular/angular.min.js')
+    script(src='/lib/angular/router.es5.js')
+    script(src='/lib/moment/moment.min.js')
+    script(src='/lib/moment/zh-tw.js')
+    script(src='/lib/angular/angular-moment.min.js')
+    script(src='/lib/bootstrap/ui-bootstrap-tpls.min.js')
+
+    script(src='/components/app.js')
+    script(src='/components/google-map/google-map.js')
+    script(src='/components/post-list/post-list.js')
+    script(src='/components/post-detail/post-detail.js')
+
+    script(type='text/javascript')
+      include ../scripts/indexMap.js
+    script(src='https://maps.googleapis.com/maps/api/js?v=3.exp&language=zh_TW&callback=initMap', async, defer)
 

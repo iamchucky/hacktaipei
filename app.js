@@ -78,6 +78,16 @@ var postHandler = {
 
 };
 
+app.route('/posts')
+  .get(function(req, res) {
+    db.post.getAll()
+      .then(function(c) {
+        console.log('posts');
+        res.json(c.toJSON());
+      })
+      .catch(logErrAndSend(res, '無法取得問題列表'));
+  });
+
 app.route('/post/:id')
   .get(function(req, res) {
     if (req.params.id == 'new') {
@@ -135,6 +145,13 @@ function handleNewPost(req, res) {
       res.redirect('/post/'+post.id);
     })
     .catch(logErrAndRedirect(res, '/'));
+}
+
+function logErrAndSend(res, msg) {
+  return function(err) {
+    console.log(err);
+    res.json({ error: err, msg: msg });
+  };
 }
 
 function logErrAndRedirect(res, path) {

@@ -1,0 +1,46 @@
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>我要發問！</h1>
+      <hr/>
+      <form method="post" class="form-horizontal">
+        <div class="form-group">
+          <label class="col-sm-2 control-label">問題標題</label>
+          <div class="col-sm-9">
+            <input id="post-title" type="text" name="title" class="form-control"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">問題內容</label>
+          <div class="col-sm-9">
+            <textarea id="post-content" rows="5" style="resize:vertical" name="content" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">地點</label>
+          <div class="col-sm-9">
+            <input id="post-location" type="text" name="location" class="form-control"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">座標</label>
+          <div class="col-sm-9">
+            <input id="lat" type="text" name="lat" style="display:none" class="form-control"/>
+            <input id="lng" type="text" name="lng" style="display:none" class="form-control"/>
+            <div class="map">
+              <div id="map-canvas" style="height:300px;"></div>
+              <div id="latlng" style="position:absolute; top:0; background-color:white;"></div>
+            </div>
+            <p>在地圖上點一下即可放下標記, 在標記上點兩下可移除標記, 也可以拖曳標記調整</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-9">
+            <button id="post-submit" type="submit" class="btn btn-default">送出</button><span id="err-text" class="err-red"></span>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
