@@ -2,13 +2,9 @@
 var express = require('express');
 var app = express();
 var db = require('./database');
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-
-app.set('views', './templates');
-app.set('view engine', 'jade');
 
 // body-parser middleware
+var bodyParser = require('body-parser');
 app.use(bodyParser.json());     // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
   extended: true
@@ -21,7 +17,11 @@ app.use(function(req, res, next) {
   next();
 });
 
+var cookieParser = require('cookie-parser');
 app.use(cookieParser());
+
+app.set('views', './templates');
+app.set('view engine', 'jade');
 
 app.locals.moment = require('moment');
 app.locals.moment.locale('zh-TW');
@@ -30,7 +30,7 @@ app.route('/')
   .get(function(req, res) {
     db.post.getAll()
       .then(function(posts) {
-        res.render('views/indexMap', { posts: posts.toJSON() });
+        res.render('views/index', { posts: posts.toJSON() });
       })
       .catch(logErrAndRedirect(res, '/'));
   });

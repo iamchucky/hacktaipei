@@ -94,3 +94,25 @@ mixin post(post)
 
   hr
   +answerForm()
+
+mixin postWell(p)
+  a.well(href='/post/'+p.id)
+    .title= p.title
+    .content= p.content
+    .attribution 
+      span= p.user_id
+      span.date
+        +editDate(p.created_at, p.updated_at)
+
+mixin posts(data, isMasonry)
+  if data && data.length
+    .post-list
+      each p in data
+        if isMasonry
+          .post-card.col-lg-3.col-md-4.col-sm-6.col-xs-12
+            +postWell(p)
+        else
+          .post-card
+            +postWell(p)
+  else
+    p 目前沒有問題

@@ -38,13 +38,18 @@ module.exports = {
       score: data.score
     };
 
+    var newPost;
     delete data.score;
     return m.Post.forge(data).save()
       .then(function(p) {
+        newPost = p;
         var postId = p.get('id');
         score.post_id = postId;
 
         return m.Score.forge(score).save();
+      })
+      .then(function() {
+        return Promise.resolve(newPost);
       });
   },
 

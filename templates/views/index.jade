@@ -1,20 +1,7 @@
 extends ../layouts/main.jade
 
 include ../mixins/utils.jade
-
-mixin posts(data)
-  if data && data.length
-    .post-list
-      each p in data
-        .post-card.col-lg-3.col-md-4.col-sm-6.col-xs-12: a.well(href='/post/'+p.id)
-          .title= p.title
-          .content= p.content
-          .attribution 
-            span= p.user_id
-            span.date
-              +editDate(p.created_at, p.updated_at)
-  else
-    p 目前沒有問題
+include ../mixins/post.jade
 
 block scripts
   script(src='/js/jquery-2.1.4.min.js')
@@ -26,4 +13,4 @@ block content
   .container: .row: .col-md-12
     h1 問題列表
     hr
-    +posts(posts)
+    +posts(posts, true)
