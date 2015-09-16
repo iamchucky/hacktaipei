@@ -18,7 +18,9 @@ window.initMap = function() {
     for (var i = 0; i < initMapCallbacks.length; ++i) {
       initMapCallbacks[i]();
     }
+    googleSDKLoaded = true;
+  } else {
+    setTimeout(initMap, 200);
   }
-  googleSDKLoaded = true;
 };
 
