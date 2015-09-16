@@ -11,6 +11,9 @@ exports.seed = function(knex, Promise) {
         user_id: 'yangchuck@gmail.com',
         title: '問題一',
         content: '有沒有第一次XX就上手的八卦？',
+        location: '台北市',
+        lat: '25.08',
+        lng: '121.55',
         created_at: new Date(),
         updated_at: new Date()
       }]);
