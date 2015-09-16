@@ -1,5 +1,8 @@
 var map;
 
+var googleSDKLoaded = false;
+var initMapCallbacks = [];
+
 window.initMap = function() {
   var mapCanvas = document.getElementById('map-canvas');
 
@@ -10,6 +13,12 @@ window.initMap = function() {
       disableDefaultUI: true,
       streetViewControl: true
     });
+
+    // google sdk is ready, so call initMapCallbacks
+    for (var i = 0; i < initMapCallbacks.length; ++i) {
+      initMapCallbacks[i]();
+    }
   }
+  googleSDKLoaded = true;
 };
 

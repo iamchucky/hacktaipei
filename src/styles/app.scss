@@ -74,22 +74,32 @@ $pane-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
     width: 100%;
     left: 0px;
 
+    transition: 0.2s;
+
     #map-canvas {
       height: 100%;
     }
   }
 
+  .map-pane.shrink-right {
+    padding-right: $right-pane-width;
+  }
+
   .right-pane {
     width: $right-pane-width;
-    padding: 15px;
+    padding: 15px 30px;
 
     overflow-y: auto;
 
     background-color: white;
     box-shadow: $pane-box-shadow;
 
-    right: 0px;
+    right: -($right-pane-width + 10px);
     transition: 0.2s;
+  }
+
+  .right-pane.show {
+    right: 0px;
   }
 }
 
@@ -116,7 +126,7 @@ $pane-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
     }
   }
 
-  a:hover {
+  a:hover, a:focus {
     color: initial;
     text-decoration: none;
   }
@@ -143,7 +153,7 @@ $pane-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
   .score-container {
     text-align: center;
     font-size: 1.75em;
-    width: 4em;
+    width: 3em;
   }
 
   p.post-content {
@@ -185,7 +195,6 @@ $pane-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
 
 .comments-container {
   margin-top: 2em;
-  margin-right: 2em;
 
   .comment-actions {
     width: 15px;
@@ -220,5 +229,5 @@ $pane-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
 }
 
 .answer-form {
-  margin-bottom: 50px;
+  margin-bottom: 15px;
 }

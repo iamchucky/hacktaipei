@@ -5,28 +5,31 @@
     <link rel="stylesheet" href="/styles/app.css">
   </head>
   <body ng-app="app" ng-controller="AppController as appCtrl" class="map-layout">
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header"><a href="/" class="navbar-brand">Hack.Taipei</a></div>
-        <div class="nav navbar-nav navbar-right"><a href="/post/new" class="btn btn-default navbar-btn">我要發問</a></div>
-      </div>
-    </nav>
+    <div ui-view="header" class="header"></div>
     <div class="container-fluid">
-      <div ng-viewport="map" class="map-pane"></div>
-      <div ng-viewport="left" class="left-pane"></div>
-      <div ng-viewport="right" class="right-pane"></div>
+      <div ui-view="map" ng-class="{'shrink-right':appCtrl.globalState.rightPaneIsShown}" class="map-pane"></div>
+      <div ui-view="left" class="left-pane"></div>
+      <div ui-view="right" ng-class="{'show':appCtrl.globalState.rightPaneIsShown}" class="right-pane"></div>
     </div>
     <script src="/lib/angular/angular.min.js"></script>
-    <script src="/lib/angular/router.es5.js"></script>
+    <script src="/lib/angular/angular-ui-router.min.js"></script>
     <script src="/lib/moment/moment.min.js"></script>
     <script src="/lib/moment/zh-tw.js"></script>
     <script src="/lib/angular/angular-moment.min.js"></script>
     <script src="/lib/bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="/components/app.js"></script>
     <script src="/components/google-map/google-map.js"></script>
+    <script src="/components/google-map/google-map-store.js"></script>
     <script src="/components/post-list/post-list.js"></script>
+    <script src="/components/post-list/post-list-store.js"></script>
     <script src="/components/post-detail/post-detail.js"></script>
+    <script src="/components/post-detail/post-detail-store.js"></script>
+    <script src="/components/post-new/post-new.js"></script>
+    <script src="/components/globalState.js"></script>
     <script type="text/javascript">var map;
+
+var googleSDKLoaded = false;
+var initMapCallbacks = [];
 
 window.initMap = function() {
   var mapCanvas = document.getElementById('map-canvas');
@@ -38,7 +41,13 @@ window.initMap = function() {
       disableDefaultUI: true,
       streetViewControl: true
     });
+
+    // google sdk is ready, so call initMapCallbacks
+    for (var i = 0; i < initMapCallbacks.length; ++i) {
+      initMapCallbacks[i]();
+    }
   }
+  googleSDKLoaded = true;
 };
 
 

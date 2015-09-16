@@ -82,7 +82,6 @@ app.route('/posts')
   .get(function(req, res) {
     db.post.getAll()
       .then(function(c) {
-        console.log('posts');
         res.json(c.toJSON());
       })
       .catch(logErrAndSend(res, '無法取得問題列表'));
@@ -101,9 +100,9 @@ app.route('/post/:id')
 
     db.post.get(id)
       .then(function(post) {
-        res.render('views/post', { post: post });
+        res.json(post);
       })
-      .catch(logErrAndRedirect(res, '/'));
+      .catch(logErrAndSend(res, '無法取得文章: '+id));
   })
   .post(function(req, res) {
     if (req.params.id == 'new') {

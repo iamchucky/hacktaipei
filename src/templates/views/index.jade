@@ -4,20 +4,15 @@ html
     title Hack.Taipei
     link(rel='stylesheet', href='/styles/app.css')
   body.map-layout(ng-app='app', ng-controller='AppController as appCtrl')
-    nav.navbar.navbar-inverse.navbar-fixed-top
-      .container-fluid
-        .navbar-header
-          a.navbar-brand(href='/') Hack.Taipei
-        .nav.navbar-nav.navbar-right
-          a.btn.btn-default.navbar-btn(href='/post/new') 我要發問
+    .header(ui-view='header')
 
     .container-fluid
-      .map-pane(ng-viewport='map')
-      .left-pane(ng-viewport='left')
-      .right-pane(ng-viewport='right')
+      .map-pane(ui-view='map', ng-class="{'shrink-right':appCtrl.globalState.rightPaneIsShown}")
+      .left-pane(ui-view='left')
+      .right-pane(ui-view='right', ng-class="{'show':appCtrl.globalState.rightPaneIsShown}")
 
     script(src='/lib/angular/angular.min.js')
-    script(src='/lib/angular/router.es5.js')
+    script(src='/lib/angular/angular-ui-router.min.js')
     script(src='/lib/moment/moment.min.js')
     script(src='/lib/moment/zh-tw.js')
     script(src='/lib/angular/angular-moment.min.js')
@@ -25,8 +20,13 @@ html
 
     script(src='/components/app.js')
     script(src='/components/google-map/google-map.js')
+    script(src='/components/google-map/google-map-store.js')
     script(src='/components/post-list/post-list.js')
+    script(src='/components/post-list/post-list-store.js')
     script(src='/components/post-detail/post-detail.js')
+    script(src='/components/post-detail/post-detail-store.js')
+    script(src='/components/post-new/post-new.js')
+    script(src='/components/globalState.js')
 
     script(type='text/javascript')
       include ../scripts/indexMap.js

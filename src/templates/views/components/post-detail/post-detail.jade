@@ -1,1 +1,70 @@
-.post-detail(ng-controller='PostDetailController as pdCtrl')
+mixin commentForm(data, ngshow)
+  .comment-form(ng-show=ngshow)
+    .input-group
+      textarea.form-control(rows='5', style='resize:vertical', name='content', placeholder='我是這樣覺得拉齁...')
+      span.input-group-addon.btn.btn-default(ng-click="pdCtrl.submitCommentForm("+data+".id)") 留言
+
+mixin comments(data, type)
+  - var comments = data + '.comments'
+  .comments-container
+    table.comments-list.table(ng-show=comments): tbody
+      tr(ng-repeat="c in "+comments)
+        td.comment-actions
+          span(ng-show='c.score', ng-class="c.score < 5 ? 'cool' : c.score < 15 ? 'warm' : c.score <= 30 ? 'hot' : 'supernova'") {{ c.score }}
+
+        td.comment-text.attribution
+          span.comment-copy {{ c.content }} – 
+          span.comment-user {{ c.user_id }}
+          span.date
+            span(am-time-ago="c.created_at") 
+
+    - var ngshow = 'pdCtrl.commentFormVisible["'+type+'"+'+data+'.id]'
+    a(ng-click=ngshow+" = true") 新增留言
+    +commentForm(data, ngshow)
+
+mixin score(data, type)
+  - var score = data+'.score'
+  td.score-container
+    .vote
+      span.glyphicon.glyphicon-triangle-top(ng-click="pdCtrl.castVote("+data+".id, "+type+", 'up')")
+    .score
+      span {{ #{score} }}
+    .vote
+      span.glyphicon.glyphicon-triangle-bottom(ng-click="pdCtrl.castVote("+data+".id, "+type+", 'down')")
+
+mixin postText(data, type)
+  table.post-text: tbody: tr
+    +score(data, type)
+
+    td
+      p.post-content {{ #{data+'.content'} }}
+
+      p.post-location(ng-show=data+'.location')
+        span.glyphicon.glyphicon-map-marker
+        span(style='margin-left:5px;') {{ #{data+'.location'} }}
+
+      +comments(data, type)
+
+mixin answers(data)
+  .answers
+    div(ng-repeat='a in '+data+'.answers')
+      hr
+      +postText('a', 'ans')
+
+mixin answerForm()
+  .answer-form
+    .input-group
+      textarea.form-control(rows='5', style='resize:vertical', name='content', placeholder='我知道解答...')
+      span.input-group-addon.btn.btn-default(ng-click='pdCtrl.submitAnswerForm()') 送出
+
+.post-detail(ng-controller='PostDetailController as pdCtrl', ng-show='pdCtrl.post')
+  h1 {{ pdCtrl.post.title }}
+  hr
+  +postText('pdCtrl.post', 'main')
+
+  .answers-container(ng-show='pdCtrl.post.answers.length')
+    h2 {{ pdCtrl.post.answers.length }} 回答
+    +answers('pdCtrl.post')
+
+  hr
+  +answerForm()

@@ -1,27 +1,16 @@
 (function() {
 'use strict';
 
-var postList = angular.module('app.postList', []);
+angular.module('app.postList', []) 
+  .controller('PostListController', ['postListStore', PostListController]);
 
-postList.controller('PostListController', ['$http', PostListController]);
-
-function PostListController($http) {
+function PostListController(postListStore) {
   var self = this;
-  this.posts = [{
-    title: '測試標題',
-    content: '有沒有測試',
-    user_id: 'yangchuck@gmail.com',
-    created_at: new Date()
-  }];
+  this.posts = [];
 
-  $http.get('/posts')
-    .then(function(res) {
-      if (res.data.error) {
-        return console.log(res.data.error);
-      }
-      self.posts = res.data;
-    }, function(res) {
-      // if any err occurred
+  postListStore.get()
+    .then(function(posts) {
+      self.posts = posts;
     });
 }
 

@@ -1,2 +1,79 @@
 
-<div ng-controller="PostDetailController as pdCtrl" class="post-detail"></div>
+<div ng-controller="PostDetailController as pdCtrl" ng-show="pdCtrl.post" class="post-detail">
+  <h1>{{ pdCtrl.post.title }}</h1>
+  <hr/>
+  <table class="post-text">
+    <tbody>
+      <tr>
+        <td class="score-container">
+          <div class="vote"><span ng-click="pdCtrl.castVote(pdCtrl.post.id, main, 'up')" class="glyphicon glyphicon-triangle-top"></span></div>
+          <div class="score"><span>{{ pdCtrl.post.score }}</span></div>
+          <div class="vote"><span ng-click="pdCtrl.castVote(pdCtrl.post.id, main, 'down')" class="glyphicon glyphicon-triangle-bottom"></span></div>
+        </td>
+        <td>
+          <p class="post-content">{{ pdCtrl.post.content }}</p>
+          <p ng-show="pdCtrl.post.location" class="post-location"><span class="glyphicon glyphicon-map-marker"></span><span style="margin-left:5px;">{{ pdCtrl.post.location }}</span></p>
+          <div class="comments-container">
+            <table ng-show="pdCtrl.post.comments" class="comments-list table">
+              <tbody>
+                <tr ng-repeat="c in pdCtrl.post.comments">
+                  <td class="comment-actions"><span ng-show="c.score" ng-class="c.score &lt; 5 ? 'cool' : c.score &lt; 15 ? 'warm' : c.score &lt;= 30 ? 'hot' : 'supernova'">{{ c.score }}</span></td>
+                  <td class="comment-text attribution"><span class="comment-copy">{{ c.content }} – </span><span class="comment-user">{{ c.user_id }}</span><span class="date"><span am-time-ago="c.created_at"> </span></span></td>
+                </tr>
+              </tbody>
+            </table><a ng-click="pdCtrl.commentFormVisible[&quot;main&quot;+pdCtrl.post.id] = true">新增留言</a>
+            <div ng-show="pdCtrl.commentFormVisible[&quot;main&quot;+pdCtrl.post.id]" class="comment-form">
+              <div class="input-group">
+                <textarea rows="5" style="resize:vertical" name="content" placeholder="我是這樣覺得拉齁..." class="form-control"></textarea><span ng-click="pdCtrl.submitCommentForm(pdCtrl.post.id)" class="input-group-addon btn btn-default">留言</span>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-show="pdCtrl.post.answers.length" class="answers-container">
+    <h2>{{ pdCtrl.post.answers.length }} 回答</h2>
+    <div class="answers">
+      <div ng-repeat="a in pdCtrl.post.answers">
+        <hr/>
+        <table class="post-text">
+          <tbody>
+            <tr>
+              <td class="score-container">
+                <div class="vote"><span ng-click="pdCtrl.castVote(a.id, ans, 'up')" class="glyphicon glyphicon-triangle-top"></span></div>
+                <div class="score"><span>{{ a.score }}</span></div>
+                <div class="vote"><span ng-click="pdCtrl.castVote(a.id, ans, 'down')" class="glyphicon glyphicon-triangle-bottom"></span></div>
+              </td>
+              <td>
+                <p class="post-content">{{ a.content }}</p>
+                <p ng-show="a.location" class="post-location"><span class="glyphicon glyphicon-map-marker"></span><span style="margin-left:5px;">{{ a.location }}</span></p>
+                <div class="comments-container">
+                  <table ng-show="a.comments" class="comments-list table">
+                    <tbody>
+                      <tr ng-repeat="c in a.comments">
+                        <td class="comment-actions"><span ng-show="c.score" ng-class="c.score &lt; 5 ? 'cool' : c.score &lt; 15 ? 'warm' : c.score &lt;= 30 ? 'hot' : 'supernova'">{{ c.score }}</span></td>
+                        <td class="comment-text attribution"><span class="comment-copy">{{ c.content }} – </span><span class="comment-user">{{ c.user_id }}</span><span class="date"><span am-time-ago="c.created_at"> </span></span></td>
+                      </tr>
+                    </tbody>
+                  </table><a ng-click="pdCtrl.commentFormVisible[&quot;ans&quot;+a.id] = true">新增留言</a>
+                  <div ng-show="pdCtrl.commentFormVisible[&quot;ans&quot;+a.id]" class="comment-form">
+                    <div class="input-group">
+                      <textarea rows="5" style="resize:vertical" name="content" placeholder="我是這樣覺得拉齁..." class="form-control"></textarea><span ng-click="pdCtrl.submitCommentForm(a.id)" class="input-group-addon btn btn-default">留言</span>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <hr/>
+  <div class="answer-form">
+    <div class="input-group">
+      <textarea rows="5" style="resize:vertical" name="content" placeholder="我知道解答..." class="form-control"></textarea><span ng-click="pdCtrl.submitAnswerForm()" class="input-group-addon btn btn-default">送出</span>
+    </div>
+  </div>
+</div>
