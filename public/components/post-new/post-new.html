@@ -2,21 +2,22 @@
 <div ng-controller="PostNewController as pnCtrl">
   <h1>我要發問！</h1>
   <hr/>
-  <form method="post" class="form">
-    <div class="form-group">
+  <form name="postForm" novalidate="novalidate">
+    <div ng-class="{ 'has-error': postForm.title.$invalid &amp;&amp; pnCtrl.formSubmitted }" class="form-group">
       <label>問題標題</label>
-      <input id="post-title" type="text" name="title" class="form-control"/>
+      <input type="text" name="title" ng-model="pnCtrl.data.title" required="required" class="form-control"/>
     </div>
-    <div class="form-group">
+    <div ng-class="{ 'has-error': postForm.content.$invalid &amp;&amp; pnCtrl.formSubmitted }" class="form-group">
       <label>問題內容</label>
-      <textarea id="post-content" rows="5" style="resize:vertical" name="content" class="form-control"></textarea>
+      <textarea rows="7" style="resize:vertical" name="content" ng-model="pnCtrl.data.content" required="required" class="form-control"></textarea>
     </div>
-    <div class="form-group">
+    <div ng-class="{ 'has-error': postForm.location.$invalid &amp;&amp; pnCtrl.formSubmitted }" class="form-group">
       <label>地點</label>
-      <input id="post-location" type="text" name="location" class="form-control"/>
+      <input type="text" name="location" ng-model="pnCtrl.data.location" required="required" class="form-control"/>
     </div>
     <div class="form-group">
-      <button id="post-submit" type="submit" class="btn btn-default">送出</button><span id="err-text" class="err-red"></span>
+      <button type="button" ng-click="pnCtrl.submitForm(postForm.$valid)" class="btn btn-default">送出</button>
+      <div class="err-msg red">{{ pnCtrl.errMsg }}</div>
     </div>
   </form>
 </div>

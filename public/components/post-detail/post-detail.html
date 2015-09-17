@@ -24,7 +24,7 @@
             </table><a ng-click="pdCtrl.commentFormVisible[&quot;main&quot;+pdCtrl.post.id] = true">新增留言</a>
             <div ng-show="pdCtrl.commentFormVisible[&quot;main&quot;+pdCtrl.post.id]" class="comment-form">
               <div class="input-group">
-                <textarea rows="5" style="resize:vertical" name="content" placeholder="我是這樣覺得拉齁..." class="form-control"></textarea><span ng-click="pdCtrl.submitCommentForm(pdCtrl.post.id)" class="input-group-addon btn btn-default">留言</span>
+                <textarea ng-model="pdCtrl.comments[&quot;main&quot;+pdCtrl.post.id]" rows="5" style="resize:vertical" name="content" placeholder="我是這樣覺得拉齁..." class="form-control"></textarea><span ng-click="pdCtrl.submitCommentForm('main', pdCtrl.post.id, pdCtrl.comments[&quot;main&quot;+pdCtrl.post.id])" class="input-group-addon btn btn-default">留言</span>
               </div>
             </div>
           </div>
@@ -59,7 +59,7 @@
                   </table><a ng-click="pdCtrl.commentFormVisible[&quot;ans&quot;+a.id] = true">新增留言</a>
                   <div ng-show="pdCtrl.commentFormVisible[&quot;ans&quot;+a.id]" class="comment-form">
                     <div class="input-group">
-                      <textarea rows="5" style="resize:vertical" name="content" placeholder="我是這樣覺得拉齁..." class="form-control"></textarea><span ng-click="pdCtrl.submitCommentForm(a.id)" class="input-group-addon btn btn-default">留言</span>
+                      <textarea ng-model="pdCtrl.comments[&quot;ans&quot;+a.id]" rows="5" style="resize:vertical" name="content" placeholder="我是這樣覺得拉齁..." class="form-control"></textarea><span ng-click="pdCtrl.submitCommentForm('ans', a.id, pdCtrl.comments[&quot;ans&quot;+a.id])" class="input-group-addon btn btn-default">留言</span>
                     </div>
                   </div>
                 </div>
@@ -73,7 +73,7 @@
   <hr/>
   <div class="answer-form">
     <div class="input-group">
-      <textarea rows="5" style="resize:vertical" name="content" placeholder="我知道解答..." class="form-control"></textarea><span ng-click="pdCtrl.submitAnswerForm()" class="input-group-addon btn btn-default">送出</span>
+      <textarea ng-model="pdCtrl.answerInput" rows="5" style="resize:vertical" name="content" placeholder="我知道解答..." class="form-control"></textarea><span ng-click="pdCtrl.submitAnswerForm()" class="input-group-addon btn btn-default">送出</span>
     </div>
   </div>
 </div>

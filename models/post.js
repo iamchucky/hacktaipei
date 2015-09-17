@@ -7,7 +7,7 @@ function latestOrdering(qb) {
 
 module.exports = {
   getAll: function() {
-    return m.Posts.forge().fetch();
+    return m.Posts.forge().query(latestOrdering).fetch();
   },
 
   get: function(id) {

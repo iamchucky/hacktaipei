@@ -2,10 +2,36 @@
 'use strict';
 
 angular.module('app.googleMap') 
-  .service('mapMarkerStore', [MapMarkerStoreService]);
+  .service('mapMarkerStore', ['postListStore', MapMarkerStoreService]);
 
-function MapMarkerStoreService() {
+function MapMarkerStoreService(postListStore) {
+  var self = this;
   this.markers = {};
+
+  this.clearMarkers = function() {
+    for (var pid in self.markers) {
+      var m = self.markers[pid]
+      m.setMap(null);
+    }
+    self.markers = {};
+  };
+
+  this.initGoogleMap = function() {
+    postListStore.get()
+      .then(function(posts) {
+        self.clearMarkers();
+
+        // show markers
+        for (var i = 0; i < posts.length; ++i) {
+          if (!posts[i].lat) continue;
+
+          self.markers[posts[i].id] = new google.maps.Marker({
+            map: map,
+            position: { lat: parseFloat(posts[i].lat), lng: parseFloat(posts[i].lng) }
+          });
+        }
+      });
+  };
 
   this.bounceMarker = function(idToBounce) {
     for (var id in this.markers) {

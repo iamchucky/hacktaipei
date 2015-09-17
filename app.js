@@ -31,9 +31,9 @@ function addComment(req, res, post_id, answer_id, user_id, content) {
 
   db.comment.create(store)
     .then(function() {
-      res.redirect('back');
+      res.json({ status: 'good' });
     })
-    .catch(logErrAndRedirect(res, 'back'));
+    .catch(logErrAndSend(res, '儲存留言出錯'));
 }
 
 function castVote(req, res, type, postId, userId, value) {
@@ -63,9 +63,9 @@ var postHandler = {
 
     db.answer.create(store)
       .then(function() {
-        res.redirect('back');
+        res.json({ status: 'good' });
       })
-      .catch(logErrAndRedirect(res, 'back'));
+      .catch(logErrAndSend(res, '儲存回答出錯'));
   },
 
   'vote-main': function(req, res, data) {
@@ -115,7 +115,10 @@ app.route('/post/:id')
     }
 
     var body = req.body;
-    if (!postHandler[body.type]) return res.send('invalid post');
+    if (!postHandler[body.type]) {
+      console.log('invalid post');
+      return res.json({ error: 'invalid post', msg: '無效post'});
+    }
 
     body.postId = id;
     body.userId = 'yangchuck@gmail.com';
@@ -140,10 +143,9 @@ function handleNewPost(req, res) {
   db.post.create(data)
     .then(function(p) {
       var post = p.toJSON();
-      // if successfully saved, redirect to that post
-      res.redirect('/post/'+post.id);
+      res.json({ id: post.id });
     })
-    .catch(logErrAndRedirect(res, '/'));
+    .catch(logErrAndSend(res, '儲存提問出錯'));
 }
 
 function logErrAndSend(res, msg) {

@@ -11,8 +11,10 @@
       <div ui-view="left" class="left-pane"></div>
       <div ui-view="right" ng-class="{'show':appCtrl.globalState.rightPaneIsShown}" class="right-pane"></div>
     </div>
+    <script src="/lib/promise-polyfill/Promise.min.js"></script>
     <script src="/lib/angular/angular.min.js"></script>
-    <script src="/lib/angular/angular-ui-router.min.js"></script>
+    <!--script(src='/lib/angular/angular-ui-router.min.js')-->
+    <script src="/lib/angular/angular-ui-router.js"></script>
     <script src="/lib/moment/moment.min.js"></script>
     <script src="/lib/moment/zh-tw.js"></script>
     <script src="/lib/angular/angular-moment.min.js"></script>

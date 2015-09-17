@@ -7,6 +7,19 @@ angular
 
 function GlobalStateService($timeout) {
   var self = this;
+
+  this.listeners = [];
+  this.addListener = function(callback) {
+    self.listeners.push(callback);
+  };
+
+  // signal for update
+  this.update = function() {
+    this.listeners.forEach(function(callback) {
+      callback();
+    });
+  };
+
   this.rightPaneIsShown = false;
   this.showRightPane = function(show) {
     if (self.rightPaneIsShown == show) return Promise.resolve();

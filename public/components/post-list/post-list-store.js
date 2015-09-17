@@ -36,6 +36,11 @@ function PostListStoreService($http) {
         // if any err occurred
       });
   }
+
+  this.flush = function() {
+    posts = [];
+    fetching = false;
+  }
 }
 
 })();

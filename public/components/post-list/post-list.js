@@ -2,16 +2,26 @@
 'use strict';
 
 angular.module('app.postList', []) 
-  .controller('PostListController', ['postListStore', PostListController]);
+  .controller('PostListController', ['postListStore', 'mapMarkerStore', 'globalState', PostListController]);
 
-function PostListController(postListStore) {
+function PostListController(postListStore, mapMarkerStore, globalState) {
   var self = this;
   this.posts = [];
 
-  postListStore.get()
-    .then(function(posts) {
-      self.posts = posts;
-    });
+  function getList() {
+    postListStore.get()
+      .then(function(posts) {
+        self.posts = posts;
+        mapMarkerStore.initGoogleMap(posts);
+      });
+  }
+
+  getList();
+
+  globalState.addListener(function() {
+    postListStore.flush();
+    getList();
+  });
 }
 
 })();

@@ -1,20 +1,20 @@
 div(ng-controller='PostNewController as pnCtrl')
   h1 我要發問！
   hr
-  form.form(method='post')
-    .form-group
+  form(name='postForm', novalidate)
+    .form-group(ng-class="{ 'has-error': postForm.title.$invalid && pnCtrl.formSubmitted }")
       label 問題標題
-      input.form-control(id='post-title', type='text', name='title')
+      input.form-control(type='text', name='title', ng-model='pnCtrl.data.title', required)
 
-    .form-group
+    .form-group(ng-class="{ 'has-error': postForm.content.$invalid && pnCtrl.formSubmitted }")
       label 問題內容
-      textarea.form-control(id='post-content', rows='5', style='resize:vertical', name='content')
+      textarea.form-control(rows='7', style='resize:vertical', name='content', ng-model='pnCtrl.data.content', required)
 
-    .form-group
+    .form-group(ng-class="{ 'has-error': postForm.location.$invalid && pnCtrl.formSubmitted }")
       label 地點
-      input.form-control(id='post-location', type='text', name='location')
+      input.form-control(type='text', name='location', ng-model='pnCtrl.data.location', required)
 
     .form-group
-      button.btn.btn-default(id='post-submit', type='submit') 送出
-      span.err-red(id='err-text')
+      button.btn.btn-default(type='button', ng-click='pnCtrl.submitForm(postForm.$valid)') 送出
+      .err-msg.red {{ pnCtrl.errMsg }}
 
