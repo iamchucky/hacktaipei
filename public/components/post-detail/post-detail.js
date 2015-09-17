@@ -40,6 +40,19 @@ function PostDetailController($timeout, $stateParams, $state, $http, globalState
     self.submitForm(data);
   };
 
+  this.castVote = function(id, type, upOrDown) {
+    var data = {
+      type: 'vote-'+type,
+      updown: upOrDown
+    };
+
+    if (type == 'ans') {
+      data.answerId = id;
+    }
+
+    self.submitForm(data);
+  };
+
   this.submitForm = function(data) {
     $http.post('/post/'+self.postId, data)
       .then(function(res) {

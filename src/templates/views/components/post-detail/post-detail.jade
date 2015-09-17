@@ -27,11 +27,11 @@ mixin score(data, type)
   - var score = data+'.score'
   td.score-container
     .vote
-      span.glyphicon.glyphicon-triangle-top(ng-click="pdCtrl.castVote("+data+".id, "+type+", 'up')")
+      span.glyphicon.glyphicon-triangle-top(ng-click="pdCtrl.castVote("+data+".id, '"+type+"', 'up')")
     .score
       span {{ #{score} }}
     .vote
-      span.glyphicon.glyphicon-triangle-bottom(ng-click="pdCtrl.castVote("+data+".id, "+type+", 'down')")
+      span.glyphicon.glyphicon-triangle-bottom(ng-click="pdCtrl.castVote("+data+".id, '"+type+"', 'down')")
 
 mixin postText(data, type)
   table.post-text: tbody: tr

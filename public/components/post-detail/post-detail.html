@@ -6,9 +6,9 @@
     <tbody>
       <tr>
         <td class="score-container">
-          <div class="vote"><span ng-click="pdCtrl.castVote(pdCtrl.post.id, main, 'up')" class="glyphicon glyphicon-triangle-top"></span></div>
+          <div class="vote"><span ng-click="pdCtrl.castVote(pdCtrl.post.id, 'main', 'up')" class="glyphicon glyphicon-triangle-top"></span></div>
           <div class="score"><span>{{ pdCtrl.post.score }}</span></div>
-          <div class="vote"><span ng-click="pdCtrl.castVote(pdCtrl.post.id, main, 'down')" class="glyphicon glyphicon-triangle-bottom"></span></div>
+          <div class="vote"><span ng-click="pdCtrl.castVote(pdCtrl.post.id, 'main', 'down')" class="glyphicon glyphicon-triangle-bottom"></span></div>
         </td>
         <td>
           <p class="post-content">{{ pdCtrl.post.content }}</p>
@@ -41,9 +41,9 @@
           <tbody>
             <tr>
               <td class="score-container">
-                <div class="vote"><span ng-click="pdCtrl.castVote(a.id, ans, 'up')" class="glyphicon glyphicon-triangle-top"></span></div>
+                <div class="vote"><span ng-click="pdCtrl.castVote(a.id, 'ans', 'up')" class="glyphicon glyphicon-triangle-top"></span></div>
                 <div class="score"><span>{{ a.score }}</span></div>
-                <div class="vote"><span ng-click="pdCtrl.castVote(a.id, ans, 'down')" class="glyphicon glyphicon-triangle-bottom"></span></div>
+                <div class="vote"><span ng-click="pdCtrl.castVote(a.id, 'ans', 'down')" class="glyphicon glyphicon-triangle-bottom"></span></div>
               </td>
               <td>
                 <p class="post-content">{{ a.content }}</p>

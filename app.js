@@ -39,9 +39,9 @@ function addComment(req, res, post_id, answer_id, user_id, content) {
 function castVote(req, res, type, postId, userId, value) {
   db.score.castVote(type, postId, userId, value)
     .then(function(p) {
-      res.redirect('back');
+      res.json({ status: 'good' });
     })
-    .catch(logErrAndRedirect(res, 'back'));
+    .catch(logErrAndSend(res, '儲存分數錯誤'));
 }
 
 var postHandler = {
