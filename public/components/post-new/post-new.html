@@ -15,9 +15,16 @@
       <label>地點</label>
       <input type="text" name="location" ng-model="pnCtrl.data.location" required="required" class="form-control"/>
     </div>
+    <div ng-class="{ 'has-error': postForm.latlng.$invalid &amp;&amp; pnCtrl.formSubmitted }" class="form-group">
+      <label>座標</label>
+      <div class="input-group"><span class="input-group-btn">
+          <button type="button" title="丟下標記" ng-click="pnCtrl.dropMarker()" class="btn btn-default"><span class="glyphicon glyphicon-map-marker"></span></button></span>
+        <input type="text" name="latlng" ng-model="pnCtrl.latLng" required="required" class="form-control"/>
+      </div>
+    </div>
     <div class="form-group">
       <button type="button" ng-click="pnCtrl.submitForm(postForm.$valid)" class="btn btn-default">送出</button>
-      <div class="err-msg red">{{ pnCtrl.errMsg }}</div>
+      <div class="err-msg">{{ pnCtrl.errMsg }}</div>
     </div>
   </form>
 </div>

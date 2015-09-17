@@ -3,10 +3,11 @@
 
 angular
   .module('app.postNew', [])
-  .controller('PostNewController', ['$timeout', '$http', '$state', 'globalState', 'mapMarkerStore', PostNewController]);
+  .controller('PostNewController', ['$scope', '$timeout', '$http', '$state', 'globalState', 'mapMarkerStore', PostNewController]);
 
-function PostNewController($timeout, $http, $state, globalState, mapMarkerStore) {
+function PostNewController($scope, $timeout, $http, $state, globalState, mapMarkerStore) {
   var self = this;
+  this.marker = null;
 
   // show the right pane if we are showing the new post view
   globalState.showRightPane(true)
@@ -14,10 +15,41 @@ function PostNewController($timeout, $http, $state, globalState, mapMarkerStore)
       mapMarkerStore.bounceMarker();
     });
 
+  this.latLng = '';
   this.data = {
     title: '',
     content: '',
-    location: ''
+    location: '',
+    lat: '',
+    lng: ''
+  };
+
+  function setLatLng(latLng) {
+    if (latLng) {
+      $scope.$evalAsync(function() {
+        self.latLng = latLng.toString();
+      });
+      self.data.lat = latLng.lat().toString();
+      self.data.lng = latLng.lng().toString();
+    }
+  }
+
+  this.dropMarker = function() {
+    if (!self.marker) {
+      var pos = map.getCenter();
+      self.marker = new google.maps.Marker({
+        map: map,
+        draggable: true,
+        animation: google.maps.Animation.DROP,
+        position: pos
+      });
+      self.marker.addListener('drag', function(e) {
+        setLatLng(e.latLng);
+      });
+      setLatLng(pos);
+    } else {
+      map.panTo(self.marker.getPosition());
+    }
   };
 
   this.errMsg = '';
@@ -34,6 +66,11 @@ function PostNewController($timeout, $http, $state, globalState, mapMarkerStore)
         if (res.data.error) {
           self.errMsg = res.data.msg;
           return console.log(res.data.error);
+        }
+
+        if (self.marker) {
+          self.marker.setMap(null);
+          self.marker = null;
         }
 
         // reload list and marker then change state

@@ -14,7 +14,13 @@ div(ng-controller='PostNewController as pnCtrl')
       label 地點
       input.form-control(type='text', name='location', ng-model='pnCtrl.data.location', required)
 
+    .form-group(ng-class="{ 'has-error': postForm.latlng.$invalid && pnCtrl.formSubmitted }")
+      label 座標
+      .input-group
+        span.input-group-btn: button.btn.btn-default(type='button', title='丟下標記', ng-click='pnCtrl.dropMarker()'): span.glyphicon.glyphicon-map-marker
+        input.form-control(type='text', name='latlng', ng-model='pnCtrl.latLng', required)
+
     .form-group
       button.btn.btn-default(type='button', ng-click='pnCtrl.submitForm(postForm.$valid)') 送出
-      .err-msg.red {{ pnCtrl.errMsg }}
+      .err-msg {{ pnCtrl.errMsg }}
 
