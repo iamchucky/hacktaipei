@@ -82,7 +82,7 @@ app.route('/posts')
   .get(function(req, res) {
     db.post.getAll()
       .then(function(c) {
-        res.json(c.toJSON());
+        res.json(c);
       })
       .catch(logErrAndSend(res, '無法取得問題列表'));
   });
@@ -121,7 +121,6 @@ app.route('/post/:id')
     }
 
     body.postId = id;
-    body.userId = 'yangchuck@gmail.com';
     postHandler[body.type](req, res, body);
   });
 
@@ -129,7 +128,7 @@ function handleNewPost(req, res) {
   // check req.body.title and content
   var body = req.body;
   var data = {
-    user_id: 'yangchuck@gmail.com',
+    user_id: body.user.id,
     title: body.title,
     content: body.content,
     location: body.location,
@@ -140,7 +139,10 @@ function handleNewPost(req, res) {
     data.lng = body.lng;
   }
 
-  db.post.create(data)
+  db.user.createIfNotExist(body.user)
+    .then(function() {
+      return db.post.create(data);
+    })
     .then(function(p) {
       var post = p.toJSON();
       res.json({ id: post.id });
@@ -150,7 +152,7 @@ function handleNewPost(req, res) {
 
 function logErrAndSend(res, msg) {
   return function(err) {
-    console.log(err);
+    console.log(err.stack);
     res.json({ error: err, msg: msg });
   };
 }

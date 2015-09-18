@@ -2,8 +2,13 @@
 <div ng-controller="PostListController as plCtrl" class="post-list">
   <h1>問題列表</h1>
   <hr/>
-  <div class="post-card"><a ng-repeat="p in plCtrl.posts" ui-sref=".postDetail({ id: p.id })" ng-click="plCtrl.onListItemClicked(p)" class="well">
-      <div class="title">{{ p.title }}</div>
-      <div class="content">{{ p.content }}</div>
-      <div class="attribution"> <span>{{ p.user_id }}</span><span class="date"><span am-time-ago="p.created_at"> </span></span></div></a></div>
+  <div class="post-card"> 
+    <div ng-repeat="p in plCtrl.posts" class="well">
+      <div ui-sref=".postDetail({ id: p.id })" ng-click="plCtrl.onListItemClicked(p)" class="item">
+        <div class="title">{{ p.title }}</div>
+        <div class="content">{{ p.content }}</div>
+      </div>
+      <div class="attribution"> <a href="http://facebook.com/{{ p.owner.id }}" target="_blank">{{ p.owner.name }}</a><span class="date"><span am-time-ago="p.created_at"> </span></span></div>
+    </div>
+  </div>
 </div>

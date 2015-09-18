@@ -3,4 +3,4 @@ nav.navbar.navbar-inverse.navbar-fixed-top
     .navbar-header
       a.navbar-brand(ui-sref='.', ng-click='appCtrl.globalState.showRightPane(false)') Hack.Taipei
     .nav.navbar-nav.navbar-right
-      a.btn.btn-default.navbar-btn(ui-sref='.postNew', style='margin-right:15px') 我要發問
+      a.btn.btn-default.navbar-btn(ng-click='appCtrl.postNew()', style='margin-right:15px') 我要發問

@@ -18,7 +18,7 @@
               <tbody>
                 <tr ng-repeat="c in pdCtrl.post.comments">
                   <td class="comment-actions"><span ng-show="c.score" ng-class="c.score &lt; 5 ? 'cool' : c.score &lt; 15 ? 'warm' : c.score &lt;= 30 ? 'hot' : 'supernova'">{{ c.score }}</span></td>
-                  <td class="comment-text attribution"><span class="comment-copy">{{ c.content }} – </span><span class="comment-user">{{ c.user_id }}</span><span class="date"><span am-time-ago="c.created_at"> </span></span></td>
+                  <td class="comment-text attribution"><span class="comment-copy">{{ c.content }} – </span><a href="//facebook.com/{{ c.owner.id }}" target="_blank" class="comment-user">{{ c.owner.name }}</a><span class="date"><span am-time-ago="c.created_at"> </span></span></td>
                 </tr>
               </tbody>
             </table><a ng-click="pdCtrl.commentFormVisible[&quot;main&quot;+pdCtrl.post.id] = true">新增留言</a>
@@ -53,7 +53,7 @@
                     <tbody>
                       <tr ng-repeat="c in a.comments">
                         <td class="comment-actions"><span ng-show="c.score" ng-class="c.score &lt; 5 ? 'cool' : c.score &lt; 15 ? 'warm' : c.score &lt;= 30 ? 'hot' : 'supernova'">{{ c.score }}</span></td>
-                        <td class="comment-text attribution"><span class="comment-copy">{{ c.content }} – </span><span class="comment-user">{{ c.user_id }}</span><span class="date"><span am-time-ago="c.created_at"> </span></span></td>
+                        <td class="comment-text attribution"><span class="comment-copy">{{ c.content }} – </span><a href="//facebook.com/{{ c.owner.id }}" target="_blank" class="comment-user">{{ c.owner.name }}</a><span class="date"><span am-time-ago="c.created_at"> </span></span></td>
                       </tr>
                     </tbody>
                   </table><a ng-click="pdCtrl.commentFormVisible[&quot;ans&quot;+a.id] = true">新增留言</a>

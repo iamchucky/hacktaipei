@@ -37,6 +37,7 @@ function GlobalStateService($timeout) {
 
     return p;
   };
+
 }
 
 })();

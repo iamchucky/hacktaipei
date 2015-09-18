@@ -15,7 +15,7 @@ mixin comments(data, type)
 
         td.comment-text.attribution
           span.comment-copy {{ c.content }} – 
-          span.comment-user {{ c.user_id }}
+          a.comment-user(href='//facebook.com/{{ c.owner.id }}', target='_blank') {{ c.owner.name }}
           span.date
             span(am-time-ago="c.created_at") 
 

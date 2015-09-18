@@ -1,10 +1,11 @@
 .post-list(ng-controller='PostListController as plCtrl')
   h1 問題列表
   hr
-  .post-card: a.well(ng-repeat='p in plCtrl.posts', ui-sref='.postDetail({ id: p.id })', ng-click='plCtrl.onListItemClicked(p)')
-    .title {{ p.title }}
-    .content {{ p.content }}
-    .attribution 
-      span {{ p.user_id }}
-      span.date
-        span(am-time-ago="p.created_at") 
+  .post-card 
+    .well(ng-repeat='p in plCtrl.posts')
+      .item(ui-sref='.postDetail({ id: p.id })', ng-click='plCtrl.onListItemClicked(p)')
+        .title {{ p.title }}
+        .content {{ p.content }}
+      .attribution 
+        a(href='http://facebook.com/{{ p.owner.id }}', target='_blank') {{ p.owner.name }}
+        span.date: span(am-time-ago="p.created_at") 

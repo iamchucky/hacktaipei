@@ -1,31 +1,36 @@
-var config = require('../config');
-var knex = require('knex')(config.db);
-var bs = require('bookshelf')(knex);
-
-var User = bs.Model.extend({ 
-  tableName: 'users',
-  hasTimestamps: ['created_at']
-});
-
-var Users = bs.Collection.extend({ model: User });
+var m = require('./m');
+var Promise = require('bluebird');
 
 module.exports = {
   getAll: function() {
-    return Users.forge().fetch();
+    return m.Users.forge().fetch();
   },
 
   get: function(id) {
-    return User.where({ id: id }).fetch();
+    return m.User.where({ id: id }).fetch();
+  },
+
+  createIfNotExist: function(user) {
+    var query = Promise.resolve();
+    var u = new m.User({id: user.id});
+    if (u.isNew()) {
+      // create user
+      query.then(function() {
+        return m.User.forge(user).save();
+      });
+    }
+
+    return query;
   },
 
   create: function(id, name) {
-    return User.forge({
+    return m.User.forge({
       id: id,
       name: name
     }).save();
   },
 
   remove: function(id) {
-    return User.where({ id: id }).destroy();
+    return m.User.where({ id: id }).destroy();
   }
 };

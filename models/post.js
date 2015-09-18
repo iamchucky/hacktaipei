@@ -7,12 +7,22 @@ function latestOrdering(qb) {
 
 module.exports = {
   getAll: function() {
-    return m.Posts.forge().query(latestOrdering).fetch();
+    return m.Posts.forge().query(latestOrdering).fetch({ withRelated: ['owner'] })
+      .then(function(c) {
+        var out = [];
+        for (var i = 0; i < c.models.length; ++i) {
+          var r = c.models[i].toJSON();
+          r.owner = c.models[i].related('owner').toJSON();
+          out.push(r);
+        }
+        return out;
+      });
   },
 
   get: function(id) {
     return m.Post.where({ id: id }).fetch({ 
       withRelated: [ {
+        'owner': function() {},
         'comments': latestOrdering,
         'answers': latestOrdering,
         'answers.comments': latestOrdering,
@@ -21,6 +31,7 @@ module.exports = {
       } ] })
     .then(function(post) {
       var p = post.toJSON();
+      p.owner = post.related('owner').toJSON();
       p.comments = post.related('comments').toJSON();
       p.answers = post.related('answers').toJSON();
       p.score = post.related('score').toJSON();
@@ -40,6 +51,7 @@ module.exports = {
 
     var newPost;
     delete data.score;
+
     return m.Post.forge(data).save()
       .then(function(p) {
         newPost = p;

@@ -61,24 +61,34 @@ function PostNewController($scope, $timeout, $http, $state, globalState, mapMark
       return; 
     }
 
-    $http.post('/post/new', self.data)
-      .then(function(res) {
-        if (res.data.error) {
-          self.errMsg = res.data.msg;
-          return console.log(res.data.error);
-        }
+    if (!fbInfo) {
+      return loginFb(sendPost);
+    }
 
-        if (self.marker) {
-          self.marker.setMap(null);
-          self.marker = null;
-        }
+    sendPost();
 
-        // reload list and marker then change state
-        globalState.update();
-        $state.go('app.postDetail', { id: res.data.id });
-      }, function(res) {
-        console.log(res);
-      });
+    function sendPost() {
+      self.data.user = fbInfo;
+      $http.post('/post/new', self.data)
+        .then(function(res) {
+          if (res.data.error) {
+            self.errMsg = res.data.msg;
+            return console.log(res.data.error);
+          }
+
+          if (self.marker) {
+            self.marker.setMap(null);
+            self.marker = null;
+          }
+
+          // reload list and marker then change state
+          globalState.update();
+          $state.go('app.postDetail', { id: res.data.id });
+        }, function(res) {
+          console.log(res);
+        });
+    }
+
   };
 
 }

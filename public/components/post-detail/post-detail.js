@@ -54,6 +54,13 @@ function PostDetailController($timeout, $stateParams, $state, $http, globalState
   };
 
   this.submitForm = function(data) {
+    if (!fbInfo) {
+      return loginFb(function() {
+        self.submitForm(data);
+      });
+    }
+
+    data.user = fbInfo;
     $http.post('/post/'+self.postId, data)
       .then(function(res) {
         if (res.data.error) {

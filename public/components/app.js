@@ -13,7 +13,7 @@ angular
     'app.googleMap',
     'app.globalStateService'
   ])
-  .controller('AppController', ['globalState', 'postDetailStore', AppController])
+  .controller('AppController', ['$state', 'globalState', 'postDetailStore', AppController])
   .run(function(amMoment) {
     // setup moment locale support
     amMoment.changeLocale('zh-tw');
@@ -56,9 +56,21 @@ angular
       })
   });
 
-function AppController(globalState, postDetailStore) {
+function AppController($state, globalState, postDetailStore) {
   var self = this;
   this.globalState = globalState;
+
+  this.postNew = function() {
+    // check login status
+    
+    if (!fbInfo) {
+      loginFb(function() {
+        $state.go('app.postNew');
+      });
+    } else {
+      $state.go('app.postNew');
+    }
+  };
 }
 
 })();
