@@ -11,23 +11,20 @@ module.exports = {
   },
 
   createIfNotExist: function(user) {
-    var query = Promise.resolve();
-    var u = new m.User({id: user.id});
-    if (u.isNew()) {
-      // create user
-      query.then(function() {
-        return m.User.forge(user).save();
+    return m.User.where({ id: user.id }).fetch()
+      .then(function(u) {
+        if (!u) {
+          return m.User.forge().save(user, { method: 'insert' });
+        }
       });
-    }
-
-    return query;
   },
 
   create: function(id, name) {
-    return m.User.forge({
+    var user = {
       id: id,
       name: name
-    }).save();
+    };
+    return m.User.forge().save(user, { method: 'insert' });
   },
 
   remove: function(id) {
