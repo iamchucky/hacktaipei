@@ -1,4 +1,5 @@
 var m = require('./m');
+var Promise = require('bluebird');
 
 module.exports = {
   getAll: function() {
@@ -6,7 +7,12 @@ module.exports = {
   },
 
   get: function(id) {
-    return m.Comment.where({ id: id }).fetch();
+    return m.Comment.where({ id: id }).fetch({ withRelated: ['owner']})
+      .then(function(c) {
+        var cjson = c.toJSON();
+        cjson.owner = c.related('owner');
+        return Promise.resolve(cjson);
+      });
   },
 
   create: function(data) {

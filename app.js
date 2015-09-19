@@ -20,24 +20,34 @@ app.use(function(req, res, next) {
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
-function addComment(req, res, post_id, answer_id, user_id, content) {
+function addComment(req, res, isAnswer, data) {
   var store = {
-    post_id: post_id,
-    answer_id: answer_id,
-    user_id: user_id,
-    content: content,
+    user_id: data.user.id,
+    content: data.content,
     score: 0
   };
 
-  db.comment.create(store)
+  if (isAnswer) {
+    store.answer_id = data.answerId;
+  } else {
+    store.post_id = data.postId;
+  }
+
+  db.user.createIfNotExist(data.user)
+    .then(function() {
+      return db.comment.create(store);
+    })
     .then(function() {
       res.json({ status: 'good' });
     })
     .catch(logErrAndSend(res, '儲存留言出錯'));
 }
 
-function castVote(req, res, type, postId, userId, value) {
-  db.score.castVote(type, postId, userId, value)
+function castVote(req, res, type, postId, user, value) {
+  db.user.createIfNotExist(user)
+    .then(function() {
+      return db.score.castVote(type, postId, user.id, value);
+    })
     .then(function(p) {
       res.json({ status: 'good' });
     })
@@ -46,22 +56,25 @@ function castVote(req, res, type, postId, userId, value) {
 
 var postHandler = {
   'comment-main': function(req, res, data) {
-    addComment(req, res, data.postId, null, 'yangchuck@gmail.com', data.content);
+    addComment(req, res, false, data);
   },
 
   'comment-ans': function(req, res, data) {
-    addComment(req, res, null, data.answerId, 'yangchuck@gmail.com', data.content);
+    addComment(req, res, true, data);
   },
 
   'answer': function(req, res, data) {
     var store = {
       post_id: data.postId,
-      user_id: 'yangchuck@gmail.com',
+      user_id: data.user.id,
       content: data.content,
       score: 0
     };
 
-    db.answer.create(store)
+    db.user.createIfNotExist(data.user)
+      .then(function() {
+        return db.answer.create(store);
+      })
       .then(function() {
         res.json({ status: 'good' });
       })
@@ -69,11 +82,11 @@ var postHandler = {
   },
 
   'vote-main': function(req, res, data) {
-    castVote(req, res, 'post', data.postId, data.userId, data.updown == 'up' ? 1:-1);
+    castVote(req, res, 'post', data.postId, data.user, data.updown == 'up' ? 1:-1);
   },
 
   'vote-ans': function(req, res, data) {
-    castVote(req, res, 'answer', data.answerId, data.userId, data.updown == 'up' ? 1:-1);
+    castVote(req, res, 'answer', data.answerId, data.user, data.updown == 'up' ? 1:-1);
   }
 
 };
@@ -152,7 +165,11 @@ function handleNewPost(req, res) {
 
 function logErrAndSend(res, msg) {
   return function(err) {
-    console.log(err.stack);
+    if (err.stack) {
+      console.log(err.stack);
+    } else {
+      console.log(err);
+    }
     res.json({ error: err, msg: msg });
   };
 }

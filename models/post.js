@@ -24,8 +24,10 @@ module.exports = {
       withRelated: [ {
         'owner': function() {},
         'comments': latestOrdering,
+        'comments.owner': function() {},
         'answers': latestOrdering,
         'answers.comments': latestOrdering,
+        'answers.comments.owner': function() {},
         'answers.score': function() {},
         'score': function() {}
       } ] })

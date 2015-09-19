@@ -38,13 +38,13 @@ m.Comment = m.bookshelf.Model.extend({
   hasTimestamps: ['created_at', 'updated_at'],
 
   owner: function() {
-    return this.hasOne(m.User);
+    return this.belongsTo(m.User);
   },
   post: function() {
-    return this.belongTo(m.Post);
+    return this.belongsTo(m.Post);
   },
   answer: function() {
-    return this.belongTo(m.Answer);
+    return this.belongsTo(m.Answer);
   }
 });
 
@@ -55,7 +55,7 @@ m.Answer = m.bookshelf.Model.extend({
   hasTimestamps: ['created_at', 'updated_at'] ,
 
   owner: function() {
-    return this.hasOne(m.User);
+    return this.belongsTo(m.User);
   },
   comments: function() {
     return this.hasMany(m.Comment);
@@ -72,10 +72,10 @@ m.Score = m.bookshelf.Model.extend({
   tableName: 'scores',
 
   post: function() {
-    return this.belongTo(m.Post);
+    return this.belongsTo(m.Post);
   },
   answer: function() {
-    return this.belongTo(m.Answer);
+    return this.belongsTo(m.Answer);
   }
 });
 
